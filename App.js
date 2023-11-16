@@ -1,20 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import Main from "./src/client/main";
+import {Text, View } from "react-native";
+import MainContainer from "./src/client/navigation/MainContainer";
+import { Provider } from "react-redux";
+import store from "./src/client/store";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Main />
-    </View>
+    <Provider store={store}>
+      <MainContainer />
+      </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

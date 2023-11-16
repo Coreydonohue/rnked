@@ -83,6 +83,8 @@ model List_Post {
   list    List   @relation(fields: [list_id], references: [id])
   type    String
   title   String
+  book_id Int?
+  book    Book?  @relation(fields: [book_id], references: [id])
 }
 
 model Comment {
@@ -112,7 +114,7 @@ model Rating {
   id        Int      @id @default(autoincrement())
   user_id   Int
   book_id   Int?
-  value     Int
+  value     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [user_id], references: [id])
@@ -122,12 +124,13 @@ model Rating {
 }
 
 model Book {
-  id             Int     @id @default(autoincrement())
+  id             Int         @id @default(autoincrement())
   title          String
   author         String
   description    String
   published_date String
   genre          String
-  cover_img_url      String?
-  Rating Rating[]
+  cover_img_url  String?
+  Ratings         Rating[]
+  List_Posts     List_Post[]
 }

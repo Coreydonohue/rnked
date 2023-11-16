@@ -94,12 +94,13 @@ router.post("/register", async (req, res,next)=>{
             }
     
             const token = jwt.sign({id:user.id}, process.env.JWT)
-    
+            
             res.send({token, user:{
                 userId: user.id, 
                 email: user.email,
                 username: user.username,
             }})
+            console.log(`User with email ${user.email} logged in successfully.`);
     
         }catch(err){
             next(err);
