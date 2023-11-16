@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  username   String    @unique
+  password   String
+  email      String    @unique
+  sub        String?   @unique
+  profilePic String?
+  roles      Role[]
+  channels   Channel[]
+  Post       Post[]
+  List       List[]
+  Votes      Vote[]
+  Comment    Comment[]
+  Rating     Rating[]
+}
+
+model Role {
+  id         Int     @id @default(autoincrement())
+  user_id    Int
+  channel_id Int
+  user       User    @relation(fields: [user_id], references: [id])
+  channel    Channel @relation(fields: [channel_id], references: [id])
+  is_admin   Boolean @default(false)
+}
+
+model Channel {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  admin    User?   @relation(fields: [admin_id], references: [id])
+  admin_id Int?
+  members  Role[]
+  private  Boolean @default(false)
+  Post     Post[]
+  List     List[]
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  title      String
+  content    String?
+  channel_id Int
+  user_id    Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  channel    Channel   @relation(fields: [channel_id], references: [id])
+  author     User      @relation(fields: [user_id], references: [id])
+  Votes      Vote[]
+  Comments   Comment[]
+  Rating     Rating[]
+}
+
+model List {
+  id         Int         @id @default(autoincrement())
+  title      String
+  content    String?
+  channel_id Int
+  user_id    Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  channel    Channel     @relation(fields: [channel_id], references: [id])
+  author     User        @relation(fields: [user_id], references: [id])
+  Posts      List_Post[]
+  Comments   Comment[]
+  Vote       Vote[]
+}
+
+model List_Post {
+  id      Int    @id @default(autoincrement())
+  rank    Int
+  list_id Int
+  list    List   @relation(fields: [list_id], references: [id])
+  type    String
+  title   String
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  post_id Int?
+  list_id Int?
+  user    User   @relation(fields: [user_id], references: [id])
+  post    Post?  @relation(fields: [post_id], references: [id])
+  list    List?  @relation(fields: [list_id], references: [id])
+  Vote    Vote[]
+}
+
+model Vote {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  post_id    Int?
+  list_id    Int?
+  comment_id Int?
+  user       User     @relation(fields: [user_id], references: [id])
+  post       Post?    @relation(fields: [post_id], references: [id])
+  list       List?    @relation(fields: [list_id], references: [id])
+  comment    Comment? @relation(fields: [comment_id], references: [id])
+}
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  book_id   Int?
+  value     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [user_id], references: [id])
+  book      Book?    @relation(fields: [book_id], references: [id])
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+}
+
+model Book {
+  id             Int     @id @default(autoincrement())
+  title          String
+  author         String
+  description    String
+  published_date String
+  genre          String
+  cover_img_url      String?
+  Rating Rating[]
+}
