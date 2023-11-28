@@ -10,30 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model FirebaseAuthUser {
-//   uid   String  @id
-//   email String?
-//   // Add other fields as needed
-//   User  User[]
-// }
-
 model User {
-  id           Int               @id @default(autoincrement())
-  // firebaseId   String?
-  // firebaseUser FirebaseAuthUser? @relation(fields: [firebaseId], references: [uid])
-  username     String            @unique
-  password     String
-  email        String            @unique
-  // email        String
-  sub          String?           @unique
-  profilePic   String?
-  roles        Role[]
-  channels     Channel[]
-  Post         Post[]
-  List         List[]
-  Votes        Vote[]
-  Comment      Comment[]
-  Rating       Rating[]
+  id          Int       @id @default(autoincrement())
+  firebaseUid String?   @unique
+  username    String    @unique
+  password    String
+  email       String    @unique
+  sub         String?   @unique
+  profilePic  String?
+  roles       Role[]
+  channels    Channel[]
+  Post        Post[]
+  List        List[]
+  Votes       Vote[]
+  Comment     Comment[]
+  Rating      Rating[]
 }
 
 model Role {

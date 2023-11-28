@@ -3,8 +3,8 @@ const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const firebaseProtection = require("../auth/middleware");
-const { createUserWithEmailAndPassword } = require("firebase/auth");
-const { auth } = require("../auth/firebase");
+const { createUserWithEmailAndPassword, firebaseUserCredential } = require("firebase/auth");
+const auth  = require("../auth/firebase");
 const bcrypt = require("bcrypt");
 
 router.post("/register", async (req, res, next) => {
@@ -12,6 +12,9 @@ router.post("/register", async (req, res, next) => {
 
   try {
     const { email, password } = req.body;
+
+    const firebaseUser = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUid = firebaseUser.user.uid;
 
     const atSymbolIndex = email.indexOf("@");
     const usernamePrefix =
@@ -24,20 +27,13 @@ router.post("/register", async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Step 1: Create user in Firebase Authentication
-    // const firebaseUserCredential = await createUserWithEmailAndPassword(
-    //   auth,
-    //   email,
-    //   password
-    // );
-    // const firebaseUID = firebaseUserCredential.user.uid;
 
-    // Step 2: Create user in Prisma PostgreSQL
     const prismaUser = await prisma.User.create({
       data: {
         username: uniqueUsername,
         password: hashedPassword, 
         email: email,
+        firebaseUid: firebaseUid,
       },
     });
 
