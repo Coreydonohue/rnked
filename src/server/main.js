@@ -15,7 +15,6 @@ app.use(express.text({limit:'200mb'}));
 app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use("/api", require("./api"));
-app.use("/auth", require("./auth"))
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}...`);

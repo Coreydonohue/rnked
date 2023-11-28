@@ -9,10 +9,14 @@ export const rankApi = createApi({
     endpoints: (builder) => ({
         addUser: builder.mutation({
             query: (body) => ({
-              url: "auth/register",
+              url: "api/users/register",
               method: "POST",
               body: body,
             }),
           }),
     })
 })
+
+export const {
+  useAddUserMutation
+} = rankApi
