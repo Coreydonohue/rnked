@@ -9,40 +9,38 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
 } from "react-native";
-import auth from "../../../../server/auth/firebase";
+import auth from "../../../../../server/auth/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { useAddUserMutation } from "../../../reducers/api";
+import { useAddUserMutation } from "../../../../reducers/api";
 
 const Login = () => {
   // state management
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authStateChanged, setAuthStateChanged] = useState(false);
 
-  const [addUser] = useAddUserMutation(); 
-
+  const [addUser] = useAddUserMutation();
 
   // navigate to home if logged in
   const navigation = useNavigation();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      user ? navigation.navigate("Profile") :  navigation.navigate("Login");
-    });
-    return unsubscribe;
-  }, []);
+      setAuthStateChanged(true);
 
-  // register
-  // const handleRegister = () => {
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //     .then((userCredentials) => {
-  //       const user = userCredentials.user;
-  //       console.log("registered with: ", user.email);
-  //     })
-  //     .catch((error) => alert(error.message));
-  // };
+      if (user) {
+        navigation.navigate("Profile");
+      } else {
+        null
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handleRegister = async () => {
     try {
@@ -50,6 +48,14 @@ const Login = () => {
         email: email,
         password: password,
       });
+      const loginResponse = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const loggedInUser = loginResponse.user;
+
+      console.log("User registered and logged in:", loggedInUser);
     } catch (err) {
       console.error("Error creating user:", err);
     }

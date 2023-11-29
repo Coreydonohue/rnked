@@ -25,6 +25,8 @@ model User {
   Votes       Vote[]
   Comment     Comment[]
   Rating      Rating[]
+  followers   Follow[]  @relation("follower")
+  following   Follow[]  @relation("followee")
 }
 
 model Role {
@@ -34,6 +36,14 @@ model Role {
   user       User    @relation(fields: [user_id], references: [id])
   channel    Channel @relation(fields: [channel_id], references: [id])
   is_admin   Boolean @default(false)
+}
+
+model Follow {
+  id          Int  @id @default(autoincrement())
+  follower_id Int
+  followee_id Int
+  follower    User @relation("follower", fields: [follower_id], references: [id])
+  followee    User @relation("followee", fields: [followee_id], references: [id])
 }
 
 model Channel {

@@ -1,29 +1,40 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { useEffect, useState } from "react";
-import Login from "./components/Login";
-import UserProfile from "./components/UserProfile";
-import { retrieveToken } from "./components/authStorage";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet } from "react-native";
+import Login from "./components/profile screen/Login";
+import UserChannel from "./components/profile screen/UserChannel";
+import auth from "../../../server/auth/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 
-const Profile = ({ navigation }) => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
+const Profile = () => {
+  const [user, setUser] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    checkLoginStatus();
-    // console.log(retrieveToken)
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const checkLoginStatus = async () => {
-    const token = await retrieveToken();
-
-    token ? setLoggedIn(true) : null;
-  };
+  useEffect(() => {
+    if (user) {
+      navigation.navigate("Profile");
+    }
+  }, [user, navigation]);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      {isLoggedIn ? <UserProfile/>  : <Login />}
-    </View>
+    <View style={styles.container}>{user ? <UserChannel /> : <Login />}</View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default Profile;

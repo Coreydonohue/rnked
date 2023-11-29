@@ -1,25 +1,38 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import auth from "../../../../server/auth/firebase";
+import auth from "../../../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
+import { useGetUserChannelQuery } from "../../../../reducers/api";
 
-const UserProfile = () => {
+const UserChannel = () => {
   const me = auth.currentUser?.email;
-
   const navigation = useNavigation();
+  // const { channel, isLoading, isError } = useGetUserChannelQuery();
+  const {data: channel, isLoading, isError} = useGetUserChannelQuery();
+  
   const handleSignOut = () => {
     auth
       .signOut()
       .then(() => {
-        navigation.replace("Login");
+        navigation.replace("Profile");
         console.log("logged out: ", me);
       })
       .catch((error) => alert(error.message));
   };
 
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (isError) {
+    return <Text>Error loading user channel</Text>;
+  }
+
+  console.log('channel from userChannel', channel) 
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>User profile</Text>
+     <Text style={styles.header}>{channel?.name}</Text>
       <Text style={styles.header}>email: {me}</Text>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText} onPress={handleSignOut}>
@@ -54,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfile;
+export default UserChannel;

@@ -14,9 +14,14 @@ export const rankApi = createApi({
               body: body,
             }),
           }),
+          getUserChannel: builder.query({
+            query: (admin_id) => `api/channels/current`,
+            // query: (admin_id) => `api/channels/${admin_id}`,
+          }),
     })
 })
 
 export const {
-  useAddUserMutation
+  useAddUserMutation,
+  useGetUserChannelQuery, 
 } = rankApi

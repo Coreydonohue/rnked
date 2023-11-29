@@ -3,19 +3,23 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Profile from "./screens/Profile";
-import Details from "./screens/Details";
+import Post from "./screens/Post";
 import Home from "./screens/home";
+import Search from "./screens/Search";
+import Channels from "./screens/Channels";
 
 const homeName = "Home";
-const detailsName = "Details";
+const postName = "Post";
 const profileName = "Profile";
+const searchName = "Search";
+const channelName = "Channels";
 
 const Tab = createBottomTabNavigator();
 
 const MainContainer = () => {
   return (
     <Tab.Navigator
-      initialRouteName={homeName}
+      initialRouteName={profileName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -23,24 +27,50 @@ const MainContainer = () => {
 
           if (rn === homeName) {
             iconName = focused ? "home" : "home-outline";
-          } else if (rn === detailsName) {
-            iconName = focused ? "list" : "list-outline";
+          } else if (rn === postName) {
+            iconName = focused ? "add" : "add-outline";
           } else if (rn === profileName) {
-            iconName = focused ? "settings" : "settings-outline";
+            iconName = focused ? "person" : "person-outline";
+          } else if (rn === searchName) {
+            iconName = focused ? "search" : "search-outline";
+          } else if (rn === channelName) {
+            iconName = focused ? "people" : "people-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
       tabBarOptions={{
-        activeTintColor: "tomato",
+        activeTintColor: "#3a86ff",
         inactiveTintColor: "grey",
         labelStyle: { paddingBottom: 10, fontSize: 10 },
         style: { padding: 10, height: 70 },
       }}
     >
-      <Tab.Screen name={homeName} component={Home} />
-      <Tab.Screen name={detailsName} component={Details} />
-      <Tab.Screen name={profileName} component={Profile} />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={homeName}
+        component={Home}
+      />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={searchName}
+        component={Search}
+      />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={channelName}
+        component={Channels}
+      />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={postName}
+        component={Post}
+      />
+      <Tab.Screen
+        options={{ headerShown: false }}
+        name={profileName}
+        component={Profile}
+      />
     </Tab.Navigator>
   );
 };
