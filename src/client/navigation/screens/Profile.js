@@ -17,7 +17,7 @@ const Profile = () => {
   const navigation = useNavigation();
 
   const { data: me, isLoading, isError } = useGetCurrentUserQuery();
-  console.log("current user from profile", me);
+  // console.log("current user from profile", me);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -59,11 +59,11 @@ const Profile = () => {
             <Text style={styles.userInfoSubTitle}>Following</Text>
           </View>
         </View>
-
+        <UserChannel />
       </ScrollView>
     </SafeAreaView>
 
-    //   <UserChannel />
+ 
   );
 };
 
