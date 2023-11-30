@@ -20,7 +20,8 @@ router.get("/current", async (req, res, next) => {
 
     const userChannel = await prisma.Channel.findFirst({
       where: {
-        admin_id: 13,
+        admin_id: 8,
+        //! replace hard coded admin with middleware user logic 
       },
     });
     // console.log('channel from get by admin', userChannel)
