@@ -14,12 +14,6 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <Stack.Navigator> */}
-          {/* <Stack.Screen options={{ headerShown: false}} name="Main" component={MainContainer} /> */}
-          {/* <Stack.Screen options={{ headerShown: false}} name="Login" component={Login} /> */}
-          {/* <Stack.Screen options={{ headerShown: false}} name="Home" component={Home} /> */}
-          {/* <Stack.Screen options={{ headerShown: false}} name="Profile" component={UserChannel} /> */}
-        {/* </Stack.Navigator> */}
         <MainContainer/> 
       </NavigationContainer>
     </Provider>

@@ -1,13 +1,13 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import auth from "../../../../../server/auth/firebase";
+import auth from "../../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
-import { useGetUserChannelQuery } from "../../../../reducers/api";
+import { useGetUserChannelQuery } from "../../../reducers/api";
 
 const UserChannel = () => {
   const me = auth.currentUser?.email;
   const navigation = useNavigation();
-  // const { channel, isLoading, isError } = useGetUserChannelQuery();
+  // const channel = useGetUserChannelQuery();
   const {data: channel, isLoading, isError} = useGetUserChannelQuery();
   
   const handleSignOut = () => {

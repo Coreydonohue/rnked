@@ -8,14 +8,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Image,
+  ScrollView
 } from "react-native";
-import auth from "../../../../../server/auth/firebase";
+import auth from "../../../../server/auth/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { useAddUserMutation } from "../../../../reducers/api";
+import { useAddUserMutation } from "../../../reducers/api";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import FormButton from "../inputs/FormButton";
+import FormInput from "../inputs/FormInput";
+import SignUp from "./SignUp";
 
 const Login = () => {
   // state management
@@ -35,7 +41,7 @@ const Login = () => {
       if (user) {
         navigation.navigate("Profile");
       } else {
-        null
+        null;
       }
     });
 
@@ -72,62 +78,76 @@ const Login = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Text style={styles.header}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image
+        source={require("../../assets/rn-social-logo.png")}
+        style={styles.logo}
+      />
+      <Text style={styles.text}> RN Social App </Text>
+      <FormInput
+        labelValue={email}
+        onChangeText={(userEmail) => setEmail(userEmail)}
+        placeholderText="Email"
+        iconType="user"
         keyboardType="email-address"
         autoCapitalize="none"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
+        autoCorrect={false}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={(text) => setPassword(text)}
+      <FormInput
+        labelValue={password}
+        onChangeText={(userPassword) => setPassword(userPassword)}
+        placeholderText="Password"
+        iconType="lock"
+        secureTextEntry={true}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <FormButton
+        buttonTitle="Sign In"
+        onPress={handleLogin}
+      />
+      <TouchableOpacity style={styles.forgotButton} onPress={() => {}}>
+        <Text style={styles.navButtonText}>Forgot Password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Register</Text>
+      <TouchableOpacity
+        style={styles.forgotButton}
+        onPress={() => navigation.navigate("Signup")}
+      >
+        <Text style={styles.navButtonText}>
+          Don't have an acount? Create here
+        </Text>
       </TouchableOpacity>
-    </KeyboardAvoidingView>
+      </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
+    paddingTop: 50,
   },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
+  logo: {
+    height: 150,
+    width: 150,
+    resizeMode: "cover",
   },
-  input: {
-    height: 40,
-    width: "80%",
-    borderColor: "gray",
-    borderWidth: 1,
+  text: {
+    fontFamily: "Kufam-SemiBoldItalic",
+    fontSize: 28,
     marginBottom: 10,
-    paddingLeft: 10,
+    color: "#051d5f",
   },
-  button: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-    width: "40%",
+  navButton: {
+    marginTop: 15,
   },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
+  forgotButton: {
+    marginVertical: 35,
+  },
+  navButtonText: {
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#2e64e5",
+    fontFamily: "Lato-Regular",
   },
 });
 
