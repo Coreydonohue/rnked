@@ -11,7 +11,10 @@ import {
 import UserChannel from "../components/profile screen/UserChannel";
 import auth from "../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
-import { useGetCurrentUserQuery } from "../../reducers/api";
+import {
+  useGetCurrentUserQuery,
+  useGetCurrentUserPostsQuery,
+} from "../../reducers/api";
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -19,8 +22,24 @@ const Profile = () => {
   const { data: me, isLoading, isError } = useGetCurrentUserQuery();
   // console.log("current user from profile", me);
 
+  const {
+    data: posts,
+    isLoading: loadingPosts,
+    isError: errorPosts,
+  } = useGetCurrentUserPostsQuery();
+
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Profile");
+        console.log("logged out: ", me);
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={{
@@ -42,12 +61,15 @@ const Profile = () => {
           <TouchableOpacity style={styles.userBtn}>
             <Text style={styles.userBtnTxt}>Message</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.userBtnTxt} onPress={handleSignOut}>Sign Out</Text>
+          </TouchableOpacity>
         </View>
 
         {/* //! replace hardcoded  */}
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>10</Text>
+            <Text style={styles.userInfoTitle}>{posts ? posts.length : 0}</Text>
             <Text style={styles.userInfoSubTitle}>Posts</Text>
           </View>
           <View style={styles.userInfoItem}>
@@ -62,8 +84,6 @@ const Profile = () => {
         <UserChannel />
       </ScrollView>
     </SafeAreaView>
-
- 
   );
 };
 

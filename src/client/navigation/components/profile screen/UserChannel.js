@@ -1,11 +1,18 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import auth from "../../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
 import {
   useGetUserChannelQuery,
   useGetCurrentUserPostsQuery,
 } from "../../../reducers/api";
+import PostCard from "../inputs/PostCard";
 
 const UserChannel = () => {
   const me = auth.currentUser?.email;
@@ -19,16 +26,6 @@ const UserChannel = () => {
   } = useGetCurrentUserPostsQuery();
   console.log("posts from channel", posts);
 
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Profile");
-        console.log("logged out: ", me);
-      })
-      .catch((error) => alert(error.message));
-  };
-
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
@@ -41,22 +38,14 @@ const UserChannel = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{channel?.name}</Text>
-      <Text style={styles.header}>email: {me}</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText} onPress={handleSignOut}>
-          Sign Out
-        </Text>
-      </TouchableOpacity>
-
       {loadingPosts ? (
         <Text>Loading posts...</Text>
       ) : (
-        <View>
-          {posts.map((post) => (
-            <Text key={post.id}>{post.title}</Text>
-          ))}
-        </View>
+        <FlatList
+          data={posts}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <PostCard post={item} />}
+        />
       )}
     </View>
   );

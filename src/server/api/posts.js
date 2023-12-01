@@ -12,9 +12,43 @@ router.get("/me", async (req, res, next) => {
       where: {
         user_id: 8,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
-    console.log(userPosts)
+    // console.log('user posts from get route', userPosts)
     res.send(userPosts);
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: "Internal server error. Please try again later." });
+    next(err);
+  }
+});
+
+router.get("/all", async (req, res, next) => {
+  try {
+    const allPosts = await prisma.Post.findMany({
+      orderBy: {
+        createdAt: 'desc', // 'desc' for descending order (newest first), 'asc' for ascending order (oldest first)
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+            // Add other user fields if needed
+          },
+        },
+      },
+    });
+    res.send(allPosts);
   } catch (err) {
     res
       .status(500)

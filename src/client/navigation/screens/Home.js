@@ -1,15 +1,28 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
+import { useGetAllPostsQuery } from "../../reducers/api";
+import PostCard from "../components/inputs/PostCard";
 
 const Home = ({navigation}) => {
+
+  const {
+    data: posts,
+    isLoading: loadingPosts,
+    isError: errorPosts,
+  } = useGetAllPostsQuery();
+  console.log("posts from home", posts);
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text
-        onPress={() => navigation.navigate("Home")}
-        style={{ fontSize: 26, fontWeight: "bold" }}
-      >
-        Home Screen
-      </Text>
+            {loadingPosts ? (
+        <Text>Loading posts...</Text>
+      ) : (
+        <FlatList
+        data={posts}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <PostCard post={item} />}
+      />
+      )}
     </View>
   );
 };

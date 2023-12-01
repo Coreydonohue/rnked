@@ -38,6 +38,9 @@ export const rankApi = createApi({
       query: (id) => `api/posts/me`,
       // query: (id) => `api/users/${id}`,
     }),
+    getAllPosts: builder.query({
+      query: () => `api/posts/all`,
+    }),
   }),
 });
 
@@ -46,5 +49,6 @@ export const {
   useGetUserChannelQuery,
   useGetCurrentUserQuery,
   useCreateNewPostMutation, 
-  useGetCurrentUserPostsQuery
+  useGetCurrentUserPostsQuery, 
+  useGetAllPostsQuery,
 } = rankApi;
