@@ -5,12 +5,16 @@ const prisma = new PrismaClient();
 const firebaseProtection = require("../auth/middleware");
 const auth = require("../auth/firebase");
 
+ //! replace hardcoded
+const userId = 14
+const channelId = 6;
+
 router.get("/me", async (req, res, next) => {
-   //! replace hardcoded
+
   try {
     const userPosts = await prisma.Post.findMany({
       where: {
-        user_id: 8,
+        user_id: userId,
       },
       orderBy: {
         createdAt: 'desc',
@@ -58,10 +62,7 @@ router.get("/all", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  //! replace hardcoded
   const { title, content } = req.body;
-  const channelId = 1;
-  const userId = 8;
 
   try {
     const newPost = await prisma.Post.create({

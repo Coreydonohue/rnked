@@ -3,6 +3,7 @@ const { auth } = require("../auth/firebase");
 
 const firebaseProtection = async (req, res, next) => {
   const token = req.headers.authorization;
+  console.log("Authorization Header:", token);
 
   if (!token) {
     return res.status(401).send("No token provided.");

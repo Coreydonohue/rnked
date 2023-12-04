@@ -77,12 +77,12 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.get("/me", async (req, res, next) => {
+router.get("/me", firebaseProtection, async (req, res, next) => {
   try {
       const user = await prisma.User.findUnique({
           where: {
-              id: 8,
-              // id: Number(req.params.id),
+              // id: 14,
+              id: Number(req.user.id),
           }
       });
 
