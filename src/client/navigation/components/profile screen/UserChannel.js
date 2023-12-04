@@ -24,7 +24,7 @@ const UserChannel = () => {
     isLoading: loadingPosts,
     isError: errorPosts,
   } = useGetCurrentUserPostsQuery();
-  console.log("posts from channel", posts);
+  // console.log("posts from channel", posts);
 
   if (isLoading) {
     return <Text>Loading...</Text>;

@@ -36,3 +36,5 @@ yarn-error.*
 
 .env
 prisma/migrations
+
+credentials.json

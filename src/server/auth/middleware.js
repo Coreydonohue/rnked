@@ -1,16 +1,17 @@
-const { verifyIdToken } = require("firebase/auth");
-const { auth } = require("../auth/firebase");
+const admin = require("../auth/admin");
 
 const firebaseProtection = async (req, res, next) => {
-  const token = req.headers.authorization;
-  console.log("Authorization Header:", token);
+  const authorizationHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
     return res.status(401).send("No token provided.");
   }
 
+  const token = authorizationHeader.substring('Bearer '.length);
+
   try {
-    const decodedToken = await verifyIdToken(auth, token);
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    // console.log("Decoded Token:", decodedToken);
 
     req.user = {
       uid: decodedToken.uid,
@@ -19,7 +20,7 @@ const firebaseProtection = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Error verifying Firebase ID token:", error);
+    console.error("Error verifying Firebase ID token:", error.stack);
     return res.status(403).send("Failed to authenticate token.");
   }
 };

@@ -5,27 +5,27 @@ const prisma = new PrismaClient();
 const firebaseProtection = require("../auth/middleware");
 const auth = require("../auth/firebase");
 
-router.get("/current", async (req, res, next) => {
+router.get("/current", firebaseProtection,  async (req, res, next) => {
   try {
-    // const firebaseUid = req.user.uid;
-    // const user = await prisma.user.findUnique({
-    //   where: {
-    //     firebaseUid: firebaseUid,
-    //   },
-    // });
+    const firebaseUid = req.user.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUid: firebaseUid,
+      },
+    });
 
-    // if (!user) {
-    //     return res.status(404).send({ message: 'User not found.' });
-    //   }
+    if (!user) {
+        return res.status(404).send({ message: 'User not found.' });
+      }
 
     const userChannel = await prisma.Channel.findFirst({
       where: {
-        admin_id: 8,
-        //! replace hard coded admin with middleware user logic 
+        admin_id: user.id,
       },
     });
     // console.log('channel from get by admin', userChannel)
     res.send(userChannel);
+    console.log('channel from get current', userChannel)
   } catch (err) {
     res
       .status(500)

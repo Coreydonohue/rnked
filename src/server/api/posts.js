@@ -5,19 +5,21 @@ const prisma = new PrismaClient();
 const firebaseProtection = require("../auth/middleware");
 const auth = require("../auth/firebase");
 
- //! replace hardcoded
-const userId = 14
-const channelId = 6;
-
-router.get("/me", async (req, res, next) => {
-
+router.get("/me", firebaseProtection, async (req, res, next) => {
   try {
+    const firebaseUid = req.user.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUid: firebaseUid,
+      },
+    });
+
     const userPosts = await prisma.Post.findMany({
       where: {
-        user_id: userId,
+        user_id: user.id,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
       include: {
         author: {
@@ -41,13 +43,12 @@ router.get("/all", async (req, res, next) => {
   try {
     const allPosts = await prisma.Post.findMany({
       orderBy: {
-        createdAt: 'desc', // 'desc' for descending order (newest first), 'asc' for ascending order (oldest first)
+        createdAt: "desc",
       },
       include: {
         author: {
           select: {
             username: true,
-            // Add other user fields if needed
           },
         },
       },
@@ -61,15 +62,28 @@ router.get("/all", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", firebaseProtection, async (req, res, next) => {
   const { title, content } = req.body;
 
   try {
+    const firebaseUid = req.user.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUid: firebaseUid,
+      },
+    });
+
+    const userChannel = await prisma.Channel.findFirst({
+      where: {
+        admin_id: user.id,
+      },
+    });
+
     const newPost = await prisma.Post.create({
       data: {
         title: title,
-        channel_id: channelId,
-        user_id: userId,
+        channel_id: userChannel.id,
+        user_id: user.id,
       },
     });
     console.log("new post", newPost);

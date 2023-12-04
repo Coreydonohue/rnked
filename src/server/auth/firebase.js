@@ -1,4 +1,3 @@
-
 const  { initializeApp } = require("firebase/app");
 const { getAuth } = require("firebase/auth");
 
@@ -16,6 +15,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+
+// console.log('auth object from firebase', auth)
 
 module.exports = auth ;
 

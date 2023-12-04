@@ -20,7 +20,4 @@ app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}...`);
   });
 
-// const io = socket(server, {
-//     allowEIO3: true,
-//     cors: {credentials: true, origin: 'http://localhost:3000'},
-// });
+  

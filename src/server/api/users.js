@@ -78,23 +78,23 @@ router.post("/register", async (req, res, next) => {
 });
 
 router.get("/me", firebaseProtection, async (req, res, next) => {
-  try {
-      const user = await prisma.User.findUnique({
-          where: {
-              // id: 14,
-              id: Number(req.user.id),
-          }
-      });
 
-      if(!user) {
-          return res.send(404).send("User not found");
-      }
-      // console.log('user from get request', user)
-      res.send(user)
+  try {
+    const user = await prisma.User.findUnique({
+      where: {
+        firebaseUid: req.user.uid,
+      },
+    });
+
+    if (!user) {
+      return res.send(404).send("User not found");
+    }
+    res.send(user);
+    console.log('current user', user)
   } catch (err) {
-      next(err)
+    // console.error("Error in findUnique:", err);
+    next(err);
   }
 });
-
 
 module.exports = router;

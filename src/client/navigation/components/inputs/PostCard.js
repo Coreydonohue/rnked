@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const PostCard = ({ post }) => {
   const { title, content, createdAt, author } = post;
-  console.log('author from post', author)
+  // console.log('author from post', author)
 
   return (
     <View style={styles.container}>

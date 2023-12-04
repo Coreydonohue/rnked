@@ -1,10 +1,32 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import auth from "../../server/auth/firebase";
 
 export const rankApi = createApi({
   tagTypes: ["rank"],
   reducerPath: "rankApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000/",
+    prepareHeaders: async (headers) => {
+      // Wait for the Firebase auth state to be ready
+      await new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, () => {
+          resolve();
+          unsubscribe();
+        });
+      });
+
+      // Get the current user from Firebase auth
+      const user = auth.currentUser;
+
+      // If a user is signed in, include the Firebase ID token in the Authorization header
+      if (user) {
+        const token = await user.getIdToken();
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
     // users
