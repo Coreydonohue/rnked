@@ -6,39 +6,16 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import auth from "../../../../server/auth/firebase";
-import { useNavigation } from "@react-navigation/native";
-import {
-  useGetUserChannelQuery,
-  useGetCurrentUserPostsQuery,
-} from "../../../reducers/api";
 import PostCard from "../inputs/PostCard";
 
-const UserChannel = () => {
-  const me = auth.currentUser?.email;
-  const navigation = useNavigation();
-  // const channel = useGetUserChannelQuery();
-  const { data: channel, isLoading, isError } = useGetUserChannelQuery();
-  const {
-    data: posts,
-    isLoading: loadingPosts,
-    isError: errorPosts,
-  } = useGetCurrentUserPostsQuery();
-  // console.log("posts from channel", posts);
-
+const UserChannel = ({ isLoading, posts }) => {
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
 
-  if (isError) {
-    return <Text>Error loading user channel</Text>;
-  }
-
-  // console.log('channel from userChannel', channel)
-
   return (
     <View style={styles.container}>
-      {loadingPosts ? (
+      {isLoading ? (
         <Text>Loading posts...</Text>
       ) : (
         <FlatList

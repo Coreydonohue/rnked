@@ -9,24 +9,23 @@ import {
   SafeAreaView,
 } from "react-native";
 import UserChannel from "../components/profile screen/UserChannel";
+import UserCard from "../components/profile screen/UserCard";
 import auth from "../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
 import {
   useGetCurrentUserQuery,
   useGetCurrentUserPostsQuery,
+  useGetUserChannelQuery,
 } from "../../reducers/api";
 
 const Profile = () => {
   const navigation = useNavigation();
 
-  const { data: me, isLoading, isError } = useGetCurrentUserQuery();
-  // console.log("current user from profile", me);
+  const { data: me } = useGetCurrentUserQuery();
 
-  const {
-    data: posts,
-    isLoading: loadingPosts,
-    isError: errorPosts,
-  } = useGetCurrentUserPostsQuery();
+  const { data: channel } = useGetUserChannelQuery();
+
+  const { data: posts, isLoading } = useGetCurrentUserPostsQuery();
 
   const handleSignOut = () => {
     auth
@@ -37,6 +36,15 @@ const Profile = () => {
       })
       .catch((error) => alert(error.message));
   };
+  //* sign out button for later placement
+
+  {
+    /* <TouchableOpacity style={styles.userBtn}>
+            <Text style={styles.userBtnTxt} onPress={handleSignOut}>
+              Sign Out
+            </Text>
+          </TouchableOpacity> */
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -48,40 +56,8 @@ const Profile = () => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <Image
-          style={styles.userImg}
-          source={require("../assets/profile-pic.png")}
-        />
-        <Text style={styles.userName}>{me?.username}</Text>
-        <Text style={styles.aboutUser}>add 'about' to user schema</Text>
-        <View style={styles.userBtnWrapper}>
-          <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.userBtnTxt}>Follow</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.userBtnTxt}>Message</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.userBtnTxt} onPress={handleSignOut}>Sign Out</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* //! replace hardcoded  */}
-        <View style={styles.userInfoWrapper}>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>{posts ? posts.length : 0}</Text>
-            <Text style={styles.userInfoSubTitle}>Posts</Text>
-          </View>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>10,000</Text>
-            <Text style={styles.userInfoSubTitle}>Followers</Text>
-          </View>
-          <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>100</Text>
-            <Text style={styles.userInfoSubTitle}>Following</Text>
-          </View>
-        </View>
-        <UserChannel />
+        <UserCard user={me} posts={posts} />
+        <UserChannel isLoading={isLoading} posts={posts} />
       </ScrollView>
     </SafeAreaView>
   );

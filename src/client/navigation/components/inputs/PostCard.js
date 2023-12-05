@@ -1,17 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 
 const PostCard = ({ post }) => {
-  const { title, content, createdAt, author } = post;
-  // console.log('author from post', author)
+  const navigation = useNavigation();
+
+  const { title, content, createdAt, author, user_id } = post;
+  // console.log('post from post', post)
+  // console.log('userId from post', user_id)
+
+  const handlePress = () => {
+    navigation.navigate("UserScreen", { userId: user_id });
+  }
 
   return (
+  
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.content}>{content}</Text>
+      <TouchableOpacity onPress={handlePress}> 
       <Text style={styles.content}>{author.username}</Text>
+      </TouchableOpacity > 
       {/* <Text style={styles.createdAt}>{createdAt.toDateString()}</Text> */}
     </View>
+   
   );
 };
 

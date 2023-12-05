@@ -52,7 +52,7 @@ const LoginStack = ({ navigation }) => (
 const AuthStack = () => {
   return (
     <Tab.Navigator
-      initialRouteName={profileName}
+      initialRouteName={homeName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;

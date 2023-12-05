@@ -25,7 +25,7 @@ router.get("/current", firebaseProtection,  async (req, res, next) => {
     });
     // console.log('channel from get by admin', userChannel)
     res.send(userChannel);
-    console.log('channel from get current', userChannel)
+    // console.log('channel from get current', userChannel)
   } catch (err) {
     res
       .status(500)

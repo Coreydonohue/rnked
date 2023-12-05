@@ -1,27 +1,30 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Profile from "./screens/Profile";
 import Post from "./screens/Post";
 import Home from "./screens/home";
 import Search from "./screens/Search";
 import Channels from "./screens/Channels";
-import UserChannel from "./components/profile screen/UserChannel";
+import UserScreen from "./screens/UserScreen";
 
 const homeName = "Home";
 const postName = "Post";
 const profileName = "Profile";
 const searchName = "Search";
 const channelName = "Channels";
-const userChannelName = "userChannel";
+const userScreen = "UserScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
 const HomeStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen name={homeName} component={Home} options={{ headerShown: false}}/>
+    <Stack.Screen name={userScreen} component={UserScreen} options={{ headerShown: false}}/>
   </Stack.Navigator>
 );
 
@@ -52,7 +55,7 @@ const ProfileStack = ({ navigation }) => (
 const AppStack = () => {
   return (
     <Tab.Navigator
-      initialRouteName={profileName}
+      initialRouteName={homeName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;

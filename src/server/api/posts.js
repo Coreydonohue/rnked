@@ -39,6 +39,8 @@ router.get("/me", firebaseProtection, async (req, res, next) => {
   }
 });
 
+
+
 router.get("/all", async (req, res, next) => {
   try {
     const allPosts = await prisma.Post.findMany({
@@ -54,6 +56,34 @@ router.get("/all", async (req, res, next) => {
       },
     });
     res.send(allPosts);
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: "Internal server error. Please try again later." });
+    next(err);
+  }
+});
+
+router.get("/:id", firebaseProtection, async (req, res, next) => {
+  try {
+    const userId = +req.params.id
+    const userPosts = await prisma.Post.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+    // console.log('user posts from get route', userPosts)
+    res.send(userPosts);
   } catch (err) {
     res
       .status(500)

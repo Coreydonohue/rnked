@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import auth from "../../server/auth/firebase";
 
 export const rankApi = createApi({
@@ -8,21 +8,17 @@ export const rankApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000/",
     prepareHeaders: async (headers) => {
-      // Wait for the Firebase auth state to be ready
       await new Promise((resolve) => {
         const unsubscribe = onAuthStateChanged(auth, () => {
           resolve();
           unsubscribe();
         });
       });
-
-      // Get the current user from Firebase auth
       const user = auth.currentUser;
 
-      // If a user is signed in, include the Firebase ID token in the Authorization header
       if (user) {
         const token = await user.getIdToken();
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set("Authorization", `Bearer ${token}`);
       }
 
       return headers;
@@ -40,6 +36,9 @@ export const rankApi = createApi({
     getCurrentUser: builder.query({
       query: (id) => `api/users/me`,
       // query: (id) => `api/users/${id}`,
+    }),
+    getUserbyId: builder.query({
+      query: (id) => `api/users/${id}`,
     }),
 
     // channels
@@ -60,6 +59,9 @@ export const rankApi = createApi({
       query: (id) => `api/posts/me`,
       // query: (id) => `api/users/${id}`,
     }),
+    getPostsByUserId: builder.query({
+      query: (id) => `api/posts/${id}`,
+    }),
     getAllPosts: builder.query({
       query: () => `api/posts/all`,
     }),
@@ -70,7 +72,9 @@ export const {
   useAddUserMutation,
   useGetUserChannelQuery,
   useGetCurrentUserQuery,
-  useCreateNewPostMutation, 
-  useGetCurrentUserPostsQuery, 
+  useGetUserbyIdQuery,
+  useCreateNewPostMutation,
+  useGetCurrentUserPostsQuery,
   useGetAllPostsQuery,
+  useGetPostsByUserIdQuery,
 } = rankApi;

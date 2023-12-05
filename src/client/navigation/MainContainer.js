@@ -1,4 +1,4 @@
-// MainContainer.tsx
+
 import React from "react";
 import { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
