@@ -5,6 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 const PostCard = ({ post }) => {
   const navigation = useNavigation();
 
+  // if (!post) {
+  //   return (
+  //     <View style={styles.container}>
+  //     <Text style={styles.title}>loading</Text>
+  //   </View>
+  //   ); 
+  // }
+
   const { title, content, createdAt, author, user_id } = post;
   // console.log('post from post', post)
   // console.log('userId from post', user_id)

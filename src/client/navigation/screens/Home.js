@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import PostCard from "../components/inputs/PostCard";
 
 const Home = () => {
+  console.log("Home component is rendering");
   const {
     data: posts,
     isLoading: loadingPosts,
@@ -21,8 +22,8 @@ const Home = () => {
       ) : (
         <FlatList
           data={posts}
-          keyExtractor={(post) => post.id.toString()}
-          renderItem={({ post }) => <PostCard post={post} />}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <PostCard post={item} />}
         />
       )}
     </View>
