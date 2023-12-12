@@ -20,6 +20,16 @@ const UserCard = ({ user, posts }) => {
 
   const { data: me } = useGetCurrentUserQuery();
 
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.replace("Profile");
+        console.log("logged out: ", me);
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -33,7 +43,9 @@ const UserCard = ({ user, posts }) => {
           {user === me ? (
             <>
               <TouchableOpacity style={styles.userBtn}>
-                <Text style={styles.userBtnTxt}>User</Text>
+                <Text style={styles.userBtnTxt} onPress={handleSignOut}>
+                  Sign Out
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.userBtn}>
                 <Text style={styles.userBtnTxt}>Settings</Text>

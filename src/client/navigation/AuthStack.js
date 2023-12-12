@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Post from "./screens/Post";
-import Home from "./screens/home";
+import Home from "./screens/Home";
 import Search from "./screens/Search";
 import Channels from "./screens/Channels";
 import Login from "./components/profile screen/Login";
@@ -52,7 +52,7 @@ const LoginStack = ({ navigation }) => (
 const AuthStack = () => {
   return (
     <Tab.Navigator
-      initialRouteName={homeName}
+      initialRouteName={profileName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;

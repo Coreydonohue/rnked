@@ -16,35 +16,21 @@ import {
   useGetCurrentUserQuery,
   useGetCurrentUserPostsQuery,
   useGetUserChannelQuery,
+  useGetUserbyIdQuery,
+  useGetPostsByUserIdQuery,
 } from "../../reducers/api";
 
-const Profile = () => {
+const Profile = ({ route }) => {
   const navigation = useNavigation();
+  // const { userId } = route.params;
+  const userId = 11 //! fix selected user Id 
 
   const { data: me } = useGetCurrentUserQuery();
+  const { data: user, isLoading: userLoading } = useGetUserbyIdQuery(userId);
+  const { data: posts, isLoading: postsLoading } =
+    useGetPostsByUserIdQuery(userId);
 
-  const { data: channel } = useGetUserChannelQuery();
-
-  const { data: posts, isLoading } = useGetCurrentUserPostsQuery();
-
-  const handleSignOut = () => {
-    auth
-      .signOut()
-      .then(() => {
-        navigation.replace("Profile");
-        console.log("logged out: ", me);
-      })
-      .catch((error) => alert(error.message));
-  };
-  //* sign out button for later placement
-
-  {
-    /* <TouchableOpacity style={styles.userBtn}>
-            <Text style={styles.userBtnTxt} onPress={handleSignOut}>
-              Sign Out
-            </Text>
-          </TouchableOpacity> */
-  }
+  const isCurrentUser = userId === me?.id;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -56,8 +42,15 @@ const Profile = () => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <UserCard user={me} posts={posts} />
-        <UserChannel isLoading={isLoading} posts={posts} />
+        <UserCard user={isCurrentUser ? me : user} posts={posts} />
+        {!isCurrentUser && (
+          <UserChannel isLoading={postsLoading} posts={posts} />
+        )}
+        {isCurrentUser && (
+          <UserChannel isLoading={postsLoading} posts={posts} />
+        )}
+        {/* <UserCard user={me} posts={posts} />
+        <UserChannel isLoading={isLoading} posts={posts} /> */}
       </ScrollView>
     </SafeAreaView>
   );

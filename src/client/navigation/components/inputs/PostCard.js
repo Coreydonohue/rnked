@@ -18,7 +18,7 @@ const PostCard = ({ post }) => {
   // console.log('userId from post', user_id)
 
   const handlePress = () => {
-    navigation.navigate("UserScreen", { userId: user_id });
+    navigation.navigate("Profile", { userId: user_id });
   }
 
   return (

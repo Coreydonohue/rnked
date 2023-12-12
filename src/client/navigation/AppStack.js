@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Profile from "./screens/Profile";
 import Post from "./screens/Post";
-import Home from "./screens/home";
+import Home from "./screens/Home";
 import Search from "./screens/Search";
 import Channels from "./screens/Channels";
 import UserScreen from "./screens/UserScreen";
@@ -24,7 +24,7 @@ const Tab = createBottomTabNavigator();
 const HomeStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen name={homeName} component={Home} options={{ headerShown: false}}/>
-    <Stack.Screen name={userScreen} component={UserScreen} options={{ headerShown: false}}/>
+    <Stack.Screen name={profileName} component={Profile} options={{ headerShown: false}}/>
   </Stack.Navigator>
 );
 
