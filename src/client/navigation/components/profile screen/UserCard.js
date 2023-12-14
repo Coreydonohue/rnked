@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -21,23 +22,23 @@ import LoadingSpinner from "../inputs/LoadingSpinner";
 const UserCard = ({ userId, posts }) => {
   const navigation = useNavigation();
 
-  // console.log("user id from usercard", userId);
-
   const { data: me } = useGetCurrentUserQuery();
   const { data: user, isLoading } = useGetUserbyIdQuery(userId);
-  console.log("user from card ", user);
+  const [createNewFollower] = useCreateNewFollowerMutation();
+  const [unfollowUser, { isSuccess: isUnfollowSuccess }] = useDeleteFollowMutation();
 
   const following = user?.followers || [];
-  console.log("following from user card ", following);
-  const [createNewFollower] = useCreateNewFollowerMutation();
-  const [unfollowUser] = useDeleteFollowMutation(); 
-
   const isCurrentUser = userId === me?.id;
 
-  // const isFollowing = following.some((follow) => follow.followee_id === userId);
-  const isFollowing = following.find((follow) => follow.followee_id === userId)
 
-  console.log("is following ", isFollowing);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followId, setfollowId] = useState(null);
+
+  useEffect(() => {
+    const follower = following.find((follow) => follow.followee_id === userId);
+    setIsFollowing(!!follower);
+    setfollowId(follower?.id);
+  }, [following, userId]);
 
   const handleSignOut = () => {
     auth
@@ -51,7 +52,11 @@ const UserCard = ({ userId, posts }) => {
 
   const handleFollow = async () => {
     try {
-      await createNewFollower(userId);
+      const response = await createNewFollower(userId);
+      const id = response.data.id;
+      setfollowId(id);
+      setIsFollowing(true);
+      console.log("new follow ID created", followId);
     } catch (error) {
       console.error("Error following user:", error);
     }
@@ -59,11 +64,18 @@ const UserCard = ({ userId, posts }) => {
 
   const handleUnfollow = async () => {
     try {
-      await unfollowUser(isFollowing?.id);
+      await unfollowUser(followId);
+      console.log("follow ID deleted", followId);
     } catch (error) {
       console.error("Error following user:", error);
     }
   };
+
+  useEffect(() => {
+    if (isUnfollowSuccess) {
+      setIsFollowing(false);
+    }
+  }, [isUnfollowSuccess]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -98,7 +110,7 @@ const UserCard = ({ userId, posts }) => {
               >
                 <Text
                   style={
-                    isFollowing ? styles.userBtnFollowed : styles.userBtnTxt
+                    isFollowing ? styles.userBtnTxtFollowed : styles.userBtnTxt
                   }
                 >
                   {isFollowing ? "Unfollow" : "Follow"}
@@ -175,7 +187,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 3,
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 5,
     marginHorizontal: 5,
     backgroundColor: "green",
   },
