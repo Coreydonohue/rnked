@@ -3,9 +3,9 @@ import { View, Text, FlatList } from "react-native";
 import { useGetAllPostsQuery } from "../../reducers/api";
 import { useNavigation } from "@react-navigation/native";
 import PostCard from "../components/inputs/PostCard";
+import LoadingSpinner from "../components/inputs/LoadingSpinner";
 
 const Home = () => {
-  console.log("Home component is rendering");
   const {
     data: posts,
     isLoading: loadingPosts,
@@ -18,7 +18,7 @@ const Home = () => {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       {loadingPosts ? (
-        <Text>Loading posts...</Text>
+        <LoadingSpinner/> 
       ) : (
         <FlatList
           data={posts}

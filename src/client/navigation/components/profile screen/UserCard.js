@@ -12,13 +12,18 @@ import auth from "../../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
 import {
   useGetCurrentUserQuery,
-  useGetCurrentUserPostsQuery,
+  useGetUserbyIdQuery,
 } from "../../../reducers/api";
 
-const UserCard = ({ user, posts }) => {
+const UserCard = ({ userId, posts }) => {
   const navigation = useNavigation();
 
+  // console.log("user id from usercard", userId);
+
   const { data: me } = useGetCurrentUserQuery();
+  const { data: user } = useGetUserbyIdQuery(userId);
+
+  const isCurrentUser = userId === me?.id;
 
   const handleSignOut = () => {
     auth
@@ -40,7 +45,7 @@ const UserCard = ({ user, posts }) => {
         <Text style={styles.userName}>{user?.username}</Text>
         <Text style={styles.aboutUser}>add 'about' to user schema</Text>
         <View style={styles.userBtnWrapper}>
-          {user === me ? (
+          {isCurrentUser ? (
             <>
               <TouchableOpacity style={styles.userBtn}>
                 <Text style={styles.userBtnTxt} onPress={handleSignOut}>

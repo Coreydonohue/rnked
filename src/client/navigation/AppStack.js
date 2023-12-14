@@ -1,6 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useGetCurrentUserQuery } from "../reducers/api";
+import LoadingSpinner from "../navigation/components/inputs/LoadingSpinner";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Profile from "./screens/Profile";
@@ -46,16 +48,29 @@ const PostStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
-const ProfileStack = ({ navigation }) => (
-  <Stack.Navigator>
-    <Stack.Screen name={profileName} component={Profile} options={{ headerShown: false}}/>
-  </Stack.Navigator>
-);
+const ProfileStack = ({ route }) => {
+  const { data: me, isLoading } = useGetCurrentUserQuery();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name={profileName} options={{ headerShown: false}}>
+        {(props) => <Profile {...props} me={me} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+};
 
 const AppStack = () => {
+
+  const { data: me } = useGetCurrentUserQuery();
+
   return (
     <Tab.Navigator
-      initialRouteName={homeName}
+      initialRouteName={profileName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;

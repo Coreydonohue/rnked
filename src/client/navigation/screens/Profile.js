@@ -20,13 +20,11 @@ import {
   useGetPostsByUserIdQuery,
 } from "../../reducers/api";
 
-const Profile = ({ route }) => {
+const Profile = ({ route, me }) => {
   const navigation = useNavigation();
-  // const { userId } = route.params;
-  const userId = 11 //! fix selected user Id 
+  const userId = route.params ? route.params.userId : me?.id;
+  // console.log("user id from profile tab", userId);
 
-  const { data: me } = useGetCurrentUserQuery();
-  const { data: user, isLoading: userLoading } = useGetUserbyIdQuery(userId);
   const { data: posts, isLoading: postsLoading } =
     useGetPostsByUserIdQuery(userId);
 
@@ -42,15 +40,8 @@ const Profile = ({ route }) => {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <UserCard user={isCurrentUser ? me : user} posts={posts} />
-        {!isCurrentUser && (
-          <UserChannel isLoading={postsLoading} posts={posts} />
-        )}
-        {isCurrentUser && (
-          <UserChannel isLoading={postsLoading} posts={posts} />
-        )}
-        {/* <UserCard user={me} posts={posts} />
-        <UserChannel isLoading={isLoading} posts={posts} /> */}
+        <UserCard userId={userId} posts={posts} />
+        <UserChannel isLoading={postsLoading} posts={posts} />
       </ScrollView>
     </SafeAreaView>
   );
