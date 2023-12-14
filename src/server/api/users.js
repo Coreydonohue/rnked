@@ -105,13 +105,17 @@ router.get("/:id", async (req, res, next) => {
       where: {
         id: userId,
       },
+      include: {
+        followers: true,
+        following: true,
+      },
     });
 
     if (!user) {
       return res.send(404).send("User not found");
     }
     res.send(user);
-    console.log('current user', user)
+    // console.log('current user', user)
   } catch (err) {
     console.error("Error in findUnique:", err);
     next(err);

@@ -65,6 +65,20 @@ export const rankApi = createApi({
     getAllPosts: builder.query({
       query: () => `api/posts/all`,
     }),
+    // followers
+    createNewFollower: builder.mutation({
+      query: (id) => ({
+        url: `api/follow/follow/${id}`,
+        method: "POST",
+        body: id,
+      }),
+    }),
+    deleteFollow: builder.mutation({
+      query: (id) => ({
+        url: `api/follow/unfollow/${id}`,
+        method: "DElETE",
+      }),
+    }),
   }),
 });
 
@@ -77,4 +91,6 @@ export const {
   useGetCurrentUserPostsQuery,
   useGetAllPostsQuery,
   useGetPostsByUserIdQuery,
+  useCreateNewFollowerMutation, 
+  useDeleteFollowMutation,
 } = rankApi;

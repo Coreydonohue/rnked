@@ -19,6 +19,7 @@ import {
   useGetUserbyIdQuery,
   useGetPostsByUserIdQuery,
 } from "../../reducers/api";
+import LoadingSpinner from "../components/inputs/LoadingSpinner";
 
 const Profile = ({ route, me }) => {
   const navigation = useNavigation();
@@ -28,7 +29,6 @@ const Profile = ({ route, me }) => {
   const { data: posts, isLoading: postsLoading } =
     useGetPostsByUserIdQuery(userId);
 
-  const isCurrentUser = userId === me?.id;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>

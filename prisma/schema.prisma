@@ -25,8 +25,8 @@ model User {
   Votes       Vote[]
   Comment     Comment[]
   Rating      Rating[]
-  followers   Follow[]  @relation("follower")
-  following   Follow[]  @relation("followee")
+  following   Follow[]  @relation("follower")
+  followers   Follow[]  @relation("followee")
 }
 
 model Role {

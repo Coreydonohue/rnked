@@ -10,7 +10,6 @@ import Post from "./screens/Post";
 import Home from "./screens/Home";
 import Search from "./screens/Search";
 import Channels from "./screens/Channels";
-import UserScreen from "./screens/UserScreen";
 
 const homeName = "Home";
 const postName = "Post";

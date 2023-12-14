@@ -13,7 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import {
   useGetCurrentUserQuery,
   useGetUserbyIdQuery,
+  useCreateNewFollowerMutation,
+  useDeleteFollowMutation,
 } from "../../../reducers/api";
+import LoadingSpinner from "../inputs/LoadingSpinner";
 
 const UserCard = ({ userId, posts }) => {
   const navigation = useNavigation();
@@ -21,9 +24,20 @@ const UserCard = ({ userId, posts }) => {
   // console.log("user id from usercard", userId);
 
   const { data: me } = useGetCurrentUserQuery();
-  const { data: user } = useGetUserbyIdQuery(userId);
+  const { data: user, isLoading } = useGetUserbyIdQuery(userId);
+  console.log("user from card ", user);
+
+  const following = user?.followers || [];
+  console.log("following from user card ", following);
+  const [createNewFollower] = useCreateNewFollowerMutation();
+  const [unfollowUser] = useDeleteFollowMutation(); 
 
   const isCurrentUser = userId === me?.id;
+
+  // const isFollowing = following.some((follow) => follow.followee_id === userId);
+  const isFollowing = following.find((follow) => follow.followee_id === userId)
+
+  console.log("is following ", isFollowing);
 
   const handleSignOut = () => {
     auth
@@ -34,6 +48,26 @@ const UserCard = ({ userId, posts }) => {
       })
       .catch((error) => alert(error.message));
   };
+
+  const handleFollow = async () => {
+    try {
+      await createNewFollower(userId);
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await unfollowUser(isFollowing?.id);
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <View style={styles.container}>
@@ -58,8 +92,17 @@ const UserCard = ({ userId, posts }) => {
             </>
           ) : (
             <>
-              <TouchableOpacity style={styles.userBtn}>
-                <Text style={styles.userBtnTxt}>Follow</Text>
+              <TouchableOpacity
+                style={isFollowing ? styles.userBtnFollowed : styles.userBtn}
+                onPress={isFollowing ? handleUnfollow : handleFollow}
+              >
+                <Text
+                  style={
+                    isFollowing ? styles.userBtnFollowed : styles.userBtnTxt
+                  }
+                >
+                  {isFollowing ? "Unfollow" : "Follow"}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.userBtn}>
                 <Text style={styles.userBtnTxt}>Message</Text>
@@ -67,19 +110,17 @@ const UserCard = ({ userId, posts }) => {
             </>
           )}
         </View>
-
-        {/* //! replace hardcoded  */}
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
             <Text style={styles.userInfoTitle}>{posts ? posts.length : 0}</Text>
             <Text style={styles.userInfoSubTitle}>Posts</Text>
           </View>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>10,000</Text>
+            <Text style={styles.userInfoTitle}>{user.followers.length}</Text>
             <Text style={styles.userInfoSubTitle}>Followers</Text>
           </View>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>100</Text>
+            <Text style={styles.userInfoTitle}>{user.following.length}</Text>
             <Text style={styles.userInfoSubTitle}>Following</Text>
           </View>
         </View>
@@ -129,8 +170,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginHorizontal: 5,
   },
+  userBtnFollowed: {
+    borderColor: "#2e64e5",
+    borderWidth: 2,
+    borderRadius: 3,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginHorizontal: 5,
+    backgroundColor: "green",
+  },
   userBtnTxt: {
     color: "#2e64e5",
+  },
+  userBtnTxtFollowed: {
+    color: "white",
   },
   userInfoWrapper: {
     flexDirection: "row",
