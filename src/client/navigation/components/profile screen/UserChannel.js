@@ -13,6 +13,8 @@ const UserChannel = ({ isLoading, posts }) => {
     return <Text>Loading...</Text>;
   }
 
+  console.log('posts from user channel', posts)
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -22,6 +24,7 @@ const UserChannel = ({ isLoading, posts }) => {
           data={posts}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <PostCard post={item} />}
+          style={styles.feed}
         />
       )}
     </View>
@@ -31,24 +34,10 @@ const UserChannel = ({ isLoading, posts }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#EBECF4",
   },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  button: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-    width: "40%",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
+  feed: {
+    marginHorizontal: 16,
   },
 });
 

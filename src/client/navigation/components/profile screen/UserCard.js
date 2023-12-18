@@ -142,11 +142,11 @@ const UserCard = ({ userId, posts }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
-  },
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: "#fff",
+  //   // padding: 20,
+  // },
   contentContainer: {
     alignItems: "center",
   },

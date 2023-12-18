@@ -22,7 +22,7 @@ model User {
   channels    Channel[]
   Post        Post[]
   List        List[]
-  Votes       Vote[]
+  Likes       Like[]
   Comment     Comment[]
   Rating      Rating[]
   following   Follow[]  @relation("follower")
@@ -67,7 +67,7 @@ model Post {
   updatedAt  DateTime  @updatedAt
   channel    Channel   @relation(fields: [channel_id], references: [id])
   author     User      @relation(fields: [user_id], references: [id])
-  Votes      Vote[]
+  Likes      Like[]
   Comments   Comment[]
   Rating     Rating[]
 }
@@ -84,7 +84,7 @@ model List {
   author     User        @relation(fields: [user_id], references: [id])
   Posts      List_Post[]
   Comments   Comment[]
-  Vote       Vote[]
+  Like       Like[]
 }
 
 model List_Post {
@@ -106,10 +106,10 @@ model Comment {
   user    User   @relation(fields: [user_id], references: [id])
   post    Post?  @relation(fields: [post_id], references: [id])
   list    List?  @relation(fields: [list_id], references: [id])
-  Vote    Vote[]
+  Like    Like[]
 }
 
-model Vote {
+model Like {
   id         Int      @id @default(autoincrement())
   user_id    Int
   post_id    Int?

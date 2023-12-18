@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import { useGetAllPostsQuery } from "../../reducers/api";
 import { useNavigation } from "@react-navigation/native";
 import PostCard from "../components/inputs/PostCard";
@@ -16,18 +16,29 @@ const Home = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View style={styles.container}>
       {loadingPosts ? (
-        <LoadingSpinner/> 
+        <LoadingSpinner />
       ) : (
         <FlatList
           data={posts}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <PostCard post={item} />}
+          style={styles.feed}
         />
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#EBECF4",
+  },
+  feed: {
+    marginHorizontal: 16,
+  },
+});
 
 export default Home;

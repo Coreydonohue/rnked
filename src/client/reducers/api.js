@@ -79,6 +79,14 @@ export const rankApi = createApi({
         method: "DElETE",
       }),
     }),
+    //likes
+    createLike: builder.mutation({
+      query: (id) => ({
+        url: `api/like`,
+        method: "POST",
+        body: id,
+      }),
+    }),
   }),
 });
 
@@ -93,4 +101,5 @@ export const {
   useGetPostsByUserIdQuery,
   useCreateNewFollowerMutation, 
   useDeleteFollowMutation,
+  useCreateLikeMutation,
 } = rankApi;
