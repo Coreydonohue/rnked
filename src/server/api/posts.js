@@ -53,6 +53,7 @@ router.get("/all", async (req, res, next) => {
             username: true,
           },
         },
+        Likes: true || false
       },
     });
     res.send(allPosts);
@@ -80,6 +81,7 @@ router.get("/:id", firebaseProtection, async (req, res, next) => {
             username: true,
           },
         },
+        Likes: true || false
       },
     });
     // console.log('user posts from get route', userPosts)

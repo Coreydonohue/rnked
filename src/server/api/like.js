@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 const firebaseProtection = require("../auth/middleware");
 const auth = require("../auth/firebase");
 
-router.post("/", firebaseProtection, async (req, res, next) => {
-    const post = req.params.id;
+router.post("/post/:id", firebaseProtection, async (req, res, next) => {
+    const postId = req.params.id;
 
   try {
     const firebaseUid = req.user.uid;
@@ -16,16 +16,10 @@ router.post("/", firebaseProtection, async (req, res, next) => {
       },
     });
 
-    // const userChannel = await prisma.Channel.findFirst({
-    //   where: {
-    //     admin_id: user.id,
-    //   },
-    // });
-
     const newLike = await prisma.Like.create({
       data: {
         user_id: +user.id,
-        post_id: +post,
+        post_id: +postId,
       },
     });
     console.log("new like", newLike);
@@ -37,5 +31,20 @@ router.post("/", firebaseProtection, async (req, res, next) => {
     next(err);
   }
 });
+
+router.delete("/remove/:id", firebaseProtection, async (req, res, next) => {
+  const likeId = req.params.id;
+    try {  
+      const like = await prisma.Like.delete({
+        where: {
+          id: +likeId
+        },
+      });
+      res.send(like);
+      console.log("deleted like", like);
+    } catch (err) {
+      next(err);
+    }
+  });
 
 module.exports = router;

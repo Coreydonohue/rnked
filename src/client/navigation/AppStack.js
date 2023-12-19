@@ -69,7 +69,8 @@ const AppStack = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={profileName}
+      // initialRouteName={profileName}
+      initialRouteName={homeName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;

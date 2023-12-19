@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,24 +11,44 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
-import { useCreateLikeMutation } from "../../../reducers/api";
+import {
+  useCreatePostLikeMutation,
+  useDeleteLikeMutation,
+} from "../../../reducers/api";
 
 const PostCard = ({ post }) => {
+  const { id, title, content, createdAt, author, user_id, Likes } = post;
   const navigation = useNavigation();
+  const [createLike] = useCreatePostLikeMutation();
+  const [removeLike] = useDeleteLikeMutation();
 
-  // if (!post) {
-  //   return (
-  //     <View style={styles.container}>
-  //     <Text style={styles.title}>loading</Text>
-  //   </View>
-  //   );
-  // }
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeId, setLikeId] = useState(Likes?.length > 0 ? Likes[0].id : null);
 
-  const { title, content, createdAt, author, user_id } = post;
-  // console.log('post from post', post)
-  // console.log('userId from post', user_id)
+  useEffect(() => {
+    const likeExists = Likes.length > 0;
+    setIsLiked(likeExists);
+  }, [Likes]);
 
-  const handlePress = () => {
+  //like and unlike posts
+  const handleLikePress = async () => {
+    try {
+      if (!isLiked) {
+        const response = await createLike(id);
+        setLikeId(response.data.id);
+        console.log(`like id ${response.data.id} for post ${id}`);
+      } else {
+        await removeLike(likeId);
+        console.log(`like id ${likeId} deleted for post ${id}`);
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("Error creating like:", error);
+    }
+  };
+
+  // link to user profile if pressed
+  const handlePressUser = () => {
     navigation.navigate("Profile", { userId: user_id });
   };
 
@@ -47,13 +68,11 @@ const PostCard = ({ post }) => {
           }}
         >
           <View>
-            <TouchableOpacity onPress={handlePress}>
+            <TouchableOpacity onPress={handlePressUser}>
               <Text style={styles.name}>{author.username}</Text>
             </TouchableOpacity>
 
-            <Text style={styles.timestamp}>
-              {moment(createdAt).fromNow()}
-            </Text>
+            <Text style={styles.timestamp}>{moment(createdAt).fromNow()}</Text>
           </View>
 
           <Ionicons
@@ -71,12 +90,14 @@ const PostCard = ({ post }) => {
           resizeMode="cover"
         />
         <View style={{ flexDirection: "row" }}>
-          <Ionicons
-            name="heart-outline"
-            size={24}
-            color="#73788B"
-            style={{ marginRight: 16 }}
-          />
+          <TouchableOpacity onPress={handleLikePress}>
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={24}
+              color={isLiked ? "red" : "#73788B"}
+              style={{ marginRight: 16 }}
+            />
+          </TouchableOpacity>
           <Ionicons name="chatbox-outline" size={24} color="#73788B" />
         </View>
       </View>
