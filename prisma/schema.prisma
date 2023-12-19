@@ -101,6 +101,7 @@ model List_Post {
 model Comment {
   id      Int    @id @default(autoincrement())
   user_id Int
+  content String
   post_id Int?
   list_id Int?
   user    User   @relation(fields: [user_id], references: [id])

@@ -93,6 +93,20 @@ export const rankApi = createApi({
         method: "DELETE",
       }),
     }),
+    //comments
+    createComment: builder.mutation({
+      query: (id) => ({
+        url: `api/comment/${id}`,
+        method: "POST",
+        body: id,
+      }),
+    }),
+    deleteComment: builder.mutation({
+      query: (id) => ({
+        url: `api/comment/delete/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -109,4 +123,6 @@ export const {
   useDeleteFollowMutation,
   useCreatePostLikeMutation,
   useDeleteLikeMutation,
+  useCreateCommentMutation, 
+  useDeleteCommentMutation,
 } = rankApi;

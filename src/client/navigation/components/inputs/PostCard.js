@@ -5,8 +5,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextBase,
+  Modal,
   Image,
+  TextInput
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,6 +15,8 @@ import moment from "moment";
 import {
   useCreatePostLikeMutation,
   useDeleteLikeMutation,
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
 } from "../../../reducers/api";
 
 const PostCard = ({ post }) => {
@@ -21,9 +24,13 @@ const PostCard = ({ post }) => {
   const navigation = useNavigation();
   const [createLike] = useCreatePostLikeMutation();
   const [removeLike] = useDeleteLikeMutation();
+  const [createComment] = useCreateCommentMutation(); 
+  const [deleteComment] = useDeleteCommentMutation(); 
 
   const [isLiked, setIsLiked] = useState(false);
   const [likeId, setLikeId] = useState(Likes?.length > 0 ? Likes[0].id : null);
+  const [commentInput, setCommentInput] = useState("")
+  const [isCommentModalVisible, setIsCommentModalVisible] =useState(false)
 
   useEffect(() => {
     const likeExists = Likes.length > 0;
@@ -46,6 +53,27 @@ const PostCard = ({ post }) => {
       console.error("Error creating like:", error);
     }
   };
+
+  //commenting
+
+  const handleCommentPress = () => {
+    setIsCommentModalVisible(true);
+  };
+
+  const handleCommentSubmit = async () => {
+    try {
+     const response = await createComment({
+      postId: id, 
+      content: commentInput
+    });
+      console.log('comment created', response.data.content)
+      console.log('comment input', commentInput)
+      setIsCommentModalVisible(false);
+      setCommentInput("");
+    } catch (error) {
+      console.error("Error creating comment:", error);
+    }
+  }
 
   // link to user profile if pressed
   const handlePressUser = () => {
@@ -98,9 +126,27 @@ const PostCard = ({ post }) => {
               style={{ marginRight: 16 }}
             />
           </TouchableOpacity>
-          <Ionicons name="chatbox-outline" size={24} color="#73788B" />
+          <TouchableOpacity onPress={handleCommentPress}>
+            <Ionicons name="chatbox-outline" size={24} color="#73788B" />
+          </TouchableOpacity>
         </View>
       </View>
+
+       {/* Comment Input Modal */}
+       <Modal visible={isCommentModalVisible} animationType="slide">
+        <View style={styles.commentModal}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Type your comment here"
+            multiline
+            value={commentInput}
+            onChangeText={(text) => setCommentInput(text)}
+          />
+          <TouchableOpacity onPress={handleCommentSubmit}>
+            <Text style={styles.submitButton}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -139,6 +185,28 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 5,
     marginVertical: 16,
+  },
+  commentModal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  commentInput: {
+    borderWidth: 1,
+    borderColor: "#73788B",
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 16,
+    width: "100%",
+    minHeight: 100,
+  },
+  submitButton: {
+    color: "#fff",
+    backgroundColor: "#3273FF",
+    padding: 12,
+    borderRadius: 8,
+    textAlign: "center",
   },
 });
 
