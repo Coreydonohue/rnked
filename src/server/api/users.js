@@ -43,15 +43,6 @@ router.post("/register", async (req, res, next) => {
       },
     });
 
-    // create users channel
-    const userChannel = await prisma.Channel.create({
-      data: {
-        name: uniqueUsername,
-        admin_id: newUser.id,
-        private: false,
-      },
-    });
-
     // create role for user channel
     const userRole = await prisma.role.create({
       data: {
@@ -61,7 +52,7 @@ router.post("/register", async (req, res, next) => {
       },
     });
 
-    res.send(newUser, userChannel, userRole);
+    res.send(newUser, userRole);
     console.log("User created:", newUser);
   } catch (error) {
     console.error("Error during registration:", error);

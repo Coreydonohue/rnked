@@ -24,7 +24,7 @@ import LoadingSpinner from "../components/inputs/LoadingSpinner";
 const Profile = ({ route, me }) => {
   const navigation = useNavigation();
   const userId = route.params ? route.params.userId : me?.id;
-  // console.log("user id from profile tab", userId);
+  console.log("user id from profile tab", userId);
 
   const { data: posts, isLoading: postsLoading } =
     useGetPostsByUserIdQuery(userId);

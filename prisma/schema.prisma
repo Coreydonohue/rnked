@@ -61,11 +61,11 @@ model Post {
   id         Int       @id @default(autoincrement())
   title      String
   content    String?
-  channel_id Int
+  channel_id Int?
   user_id    Int
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  channel    Channel   @relation(fields: [channel_id], references: [id])
+  channel    Channel?   @relation(fields: [channel_id], references: [id])
   author     User      @relation(fields: [user_id], references: [id])
   Likes      Like[]
   Comments   Comment[]

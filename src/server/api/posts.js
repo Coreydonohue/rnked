@@ -105,17 +105,11 @@ router.post("/", firebaseProtection, async (req, res, next) => {
       },
     });
 
-    const userChannel = await prisma.Channel.findFirst({
-      where: {
-        admin_id: user.id,
-      },
-    });
-
     const newPost = await prisma.Post.create({
       data: {
         title: title,
-        channel_id: userChannel.id,
         user_id: user.id,
+        // author: { connect: { id: user.id } }
       },
     });
     console.log("new post", newPost);
