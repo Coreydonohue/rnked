@@ -55,16 +55,8 @@ router.post("/register", async (req, res, next) => {
     // create role for user channel
     const userRole = await prisma.role.create({
       data: {
-        user: {
-          connect: {
-            id: newUser.id,
-          },
-        },
-        channel: {
-          connect: {
-            id: userChannel.id,
-          },
-        },
+        user_id: +newUser.id,
+        channel_id: +userChannel.id,
         is_admin: true,
       },
     });
@@ -78,11 +70,10 @@ router.post("/register", async (req, res, next) => {
 });
 
 router.get("/me", firebaseProtection, async (req, res, next) => {
-
   try {
     const user = await prisma.User.findUnique({
       where: {
-        // firebaseUid: "saMDkG2tWLZXtFnrYJlfBEcHmy12",
+        // firebaseUid: "LGPhOFoy4RWq5BHE51CtBdh2Klk1",
         firebaseUid: req.user.uid,
       },
     });
@@ -100,7 +91,7 @@ router.get("/me", firebaseProtection, async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const userId = +req.params.id
+    const userId = +req.params.id;
 
     const user = await prisma.User.findUnique({
       where: {
@@ -122,6 +113,5 @@ router.get("/:id", async (req, res, next) => {
     next(err);
   }
 });
-
 
 module.exports = router;

@@ -49,9 +49,19 @@ export const rankApi = createApi({
     getAdminChannels: builder.query({
       query: (id) => `api/channels/admin/${id}`,
     }),
+    getPublicChannels: builder.query({
+      query: () => `api/channels/public`,
+    }),
     createChannel: builder.mutation({
       query: (body) => ({
         url: "api/channels/create",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    joinChannel: builder.mutation({
+      query: (body) => ({
+        url: "api/role/join",
         method: "POST",
         body: body,
       }),
@@ -124,7 +134,9 @@ export const {
   useAddUserMutation,
   useGetUserChannelQuery,
   useGetAdminChannelsQuery, 
+  useGetPublicChannelsQuery, 
   useCreateChannelMutation,
+  useJoinChannelMutation,
   useGetCurrentUserQuery,
   useGetUserbyIdQuery,
   useCreateNewPostMutation,

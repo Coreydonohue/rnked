@@ -32,7 +32,8 @@ const CreateChannel = () => {
     <View style={styles.container}>
       <TextInput
         style={styles.channelInput}
-        placeholder="Type your comment here"
+        placeholder="Channel Name"
+        placeholderTextColor="#A9A9A9" 
         multiline
         value={channelInput}
         onChangeText={(text) => setChannelInput(text)}
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 16,
     width: "100%",
-    minHeight: 100,
+    minHeight: 50,
   },
   submitButton: {
     color: "#fff",

@@ -7,5 +7,6 @@ router.use("/posts", require("./posts"));
 router.use("/follow", require("./follow"));
 router.use("/like", require("./like"));
 router.use("/comment", require("./comment"));
+router.use("/role", require("./role"));
 
 module.exports = router;

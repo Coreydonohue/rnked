@@ -10,6 +10,7 @@ import Post from "./screens/Post";
 import Home from "./screens/Home";
 import Search from "./screens/Search";
 import Channels from "./screens/Channels";
+import ViewChannel from "./components/Channels/ViewChannel";
 
 const homeName = "Home";
 const postName = "Post";
@@ -38,6 +39,7 @@ const SearchStack = ({ navigation }) => (
 const ChannelsStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen name={channelName} component={Channels} options={{ headerShown: false}}/>
+    <Stack.Screen name='Channel' component={ViewChannel} options={{ headerShown: false}}/>
   </Stack.Navigator>
 );
 
