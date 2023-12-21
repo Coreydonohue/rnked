@@ -52,6 +52,9 @@ export const rankApi = createApi({
     getPublicChannels: builder.query({
       query: () => `api/channels/public`,
     }),
+    getPrivateChannels: builder.query({
+      query: () => `api/channels/private`,
+    }),
     createChannel: builder.mutation({
       query: (body) => ({
         url: "api/channels/create",
@@ -66,6 +69,13 @@ export const rankApi = createApi({
         body: body,
       }),
     }),
+    // joinPrivateChannel: builder.mutation({
+    //   query: (body) => ({
+    //     url: "api/role/join",
+    //     method: "POST",
+    //     body: body,
+    //   }),
+    // }),
 
     //posts
     createNewPost: builder.mutation({
@@ -127,6 +137,24 @@ export const rankApi = createApi({
         method: "DELETE",
       }),
     }),
+    //join channel requests 
+    createJoinRequest: builder.mutation({
+      query: (id) => ({
+        url: `api/joinRequest/request/${id}`,
+        method: "POST",
+        body: id,
+      }),
+    }),
+    getJoinRequests: builder.query({
+      query: (id) => `api/joinRequest/channel/${id}`,
+    }),
+    acceptJoinRequest: builder.mutation({
+      query: (id) => ({
+        url: `api/role/accept`,
+        method: "POST",
+        body: id,
+      }),
+    }),
   }),
 });
 
@@ -135,8 +163,10 @@ export const {
   useGetUserChannelQuery,
   useGetAdminChannelsQuery, 
   useGetPublicChannelsQuery, 
+  useGetPrivateChannelsQuery,
   useCreateChannelMutation,
   useJoinChannelMutation,
+  useAcceptJoinRequestMutation,
   useGetCurrentUserQuery,
   useGetUserbyIdQuery,
   useCreateNewPostMutation,
@@ -149,4 +179,6 @@ export const {
   useDeleteLikeMutation,
   useCreateCommentMutation, 
   useDeleteCommentMutation,
+  useCreateJoinRequestMutation, 
+  useGetJoinRequestsQuery,
 } = rankApi;

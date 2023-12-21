@@ -95,6 +95,32 @@ router.get("/public", firebaseProtection, async (req, res, next) => {
   }
 });
 
+router.get("/private", firebaseProtection, async (req, res, next) => {
+  try {
+    const privateChannels = await prisma.Channel.findMany({
+      where: {
+        private: true,
+      },
+      include: {
+        members: {
+          include: {
+            user: true,
+          },
+        },
+        Post: true,
+        List: true,
+      },
+    });
+    res.send(privateChannels);
+    // console.log('admin channels', adminChannels)
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: "Internal server error. Please try again later." });
+    next(err);
+  }
+});
+
 router.post("/create", firebaseProtection, async (req, res, next) => {
   //   const postId = req.params.id;
   const { name, private } = req.body;

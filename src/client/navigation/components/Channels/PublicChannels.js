@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, FlatList, TouchableOpacity } from 'react-native
 import { useGetPublicChannelsQuery } from '../../../reducers/api';
 import { useNavigation } from "@react-navigation/native";
 
-const OpenChannels = () => {
+const PublicChannels = () => {
     const { data: channels } = useGetPublicChannelsQuery();
     const navigation = useNavigation();
 
@@ -30,11 +30,13 @@ const OpenChannels = () => {
     
     const styles = StyleSheet.create({
       container: {
-        // Your container styles here
+        borderWidth: 1, 
+        borderColor: 'black', 
+        padding: 10
       },
       text: {
         // Your text styles here
       },
     });
 
-export default OpenChannels;
+export default PublicChannels;

@@ -36,7 +36,9 @@ const JoinedChannels = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // Your container styles here
+    borderWidth: 1, 
+    borderColor: 'black', 
+    padding: 10
   },
   text: {
     // Your text styles here

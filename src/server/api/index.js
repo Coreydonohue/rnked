@@ -8,5 +8,6 @@ router.use("/follow", require("./follow"));
 router.use("/like", require("./like"));
 router.use("/comment", require("./comment"));
 router.use("/role", require("./role"));
+router.use("/joinRequest", require("./joinRequest"));
 
 module.exports = router;

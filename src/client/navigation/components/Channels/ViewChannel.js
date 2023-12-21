@@ -1,22 +1,25 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
-import { useJoinChannelMutation } from "../../../reducers/api";
+import { useJoinChannelMutation, useCreateJoinRequestMutation } from "../../../reducers/api";
+import ViewJoinRequests from "./ViewJoinRequests";
 
 const ViewChannel = ({ route }) => {
 
   const [joinChannel] = useJoinChannelMutation();
+  const [joinRequest] = useCreateJoinRequestMutation();
 
   const channel = route.params.channel;
+  const channelId = channel.id
   const isPrivate = route.params.channel.private;
 
-  console.log("route from channel", channel);
+//   console.log("route from channel", channel);
 
   const handleJoinPublic = async () => {
     try {
         await joinChannel({
-            channelId: channel.id, 
+            channelId: channelId, 
         })
-        console.log('channel joined', channel.id)
+        console.log('channel joined', channelId)
 
     }catch (error) {
         console.error("Error joining channel:", error);
@@ -24,15 +27,13 @@ const ViewChannel = ({ route }) => {
   };
 
   const handleJoinPrivate = async () => {
-    // try {
-    //     await joinChannel({
-    //        name: channelInput, 
-    //        private: isPrivate 
-    //     })
+    try {
+        await joinRequest(channelId)
+        console.log('join requested sent', channelId)
 
-    // }catch (error) {
-    //     console.error("Error creating channel:", error);
-    // }
+    }catch (error) {
+        console.error("Error joining channel:", error);
+    }
   };
 
   return (
@@ -50,6 +51,8 @@ const ViewChannel = ({ route }) => {
             renderItem={({ item }) => <Text>{item.user.username}</Text>}
             style={styles.feed}
           />
+    <ViewJoinRequests channelId={channelId}/> 
+    {/* //! add check for admin  */}
     </View>
   );
 };
