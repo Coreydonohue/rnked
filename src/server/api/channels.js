@@ -34,4 +34,57 @@ router.get("/current", firebaseProtection,  async (req, res, next) => {
   }
 });
 
+router.get("/admin", firebaseProtection,  async (req, res, next) => {
+  try {
+    const firebaseUid = req.user.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUid: firebaseUid,
+      },
+    });
+
+    const adminChannels = await prisma.Channel.findMany({
+      where: {
+        admin_id: +user.id,
+      },
+    });
+    res.send(adminChannels);
+    console.log('admin channels', adminChannels)
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: "Internal server error. Please try again later." });
+    next(err);
+  }
+});
+
+
+router.post("/create", firebaseProtection, async (req, res, next) => {
+  //   const postId = req.params.id;
+    const {name, private} = req.body
+    try {
+      const firebaseUid = req.user.uid;
+      const user = await prisma.user.findUnique({
+        where: {
+          firebaseUid: firebaseUid,
+        },
+      });
+  
+      const channel = await prisma.channel.create({
+        data: {
+          admin_id: +user.id,
+          name: name,
+          private: private
+        },
+      });
+      console.log("new channel", channel);
+      res.send(channel);
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: "Internal server error. Please try again later." });
+      next(err);
+    }
+  });
+
 module.exports = router;
