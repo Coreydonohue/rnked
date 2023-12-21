@@ -34,9 +34,11 @@ router.get("/current", firebaseProtection,  async (req, res, next) => {
   }
 });
 
-router.get("/admin", firebaseProtection,  async (req, res, next) => {
+router.get("/admin/:id", firebaseProtection,  async (req, res, next) => {
   try {
-    const firebaseUid = req.user.uid;
+    const firebaseUid = req.params.id;
+    // const firebaseUid = req.user.uid;
+    console.log('req params', req.params)
     const user = await prisma.user.findUnique({
       where: {
         firebaseUid: firebaseUid,
@@ -49,7 +51,7 @@ router.get("/admin", firebaseProtection,  async (req, res, next) => {
       },
     });
     res.send(adminChannels);
-    console.log('admin channels', adminChannels)
+    // console.log('admin channels', adminChannels)
   } catch (err) {
     res
       .status(500)

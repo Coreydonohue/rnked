@@ -47,7 +47,7 @@ export const rankApi = createApi({
       // query: (admin_id) => `api/channels/${admin_id}`,
     }),
     getAdminChannels: builder.query({
-      query: () => `api/channels/admin`,
+      query: (id) => `api/channels/admin/${id}`,
     }),
     createChannel: builder.mutation({
       query: (body) => ({
