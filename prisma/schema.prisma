@@ -47,14 +47,15 @@ model Follow {
 }
 
 model Channel {
-  id       Int     @id @default(autoincrement())
-  name     String  @unique
-  admin    User?   @relation(fields: [admin_id], references: [id])
-  admin_id Int?
-  members  Role[]
-  private  Boolean @default(false)
-  Post     Post[]
-  List     List[]
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  admin       User?         @relation(fields: [admin_id], references: [id])
+  admin_id    Int?
+  members     Role[]
+  private     Boolean       @default(false)
+  Post        Post[]
+  List        List[]
+  JoinRequest JoinRequest[]
 }
 
 model Post {
@@ -65,7 +66,7 @@ model Post {
   user_id    Int
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  channel    Channel?   @relation(fields: [channel_id], references: [id])
+  channel    Channel?  @relation(fields: [channel_id], references: [id])
   author     User      @relation(fields: [user_id], references: [id])
   Likes      Like[]
   Comments   Comment[]
@@ -145,4 +146,12 @@ model Book {
   cover_img_url  String?
   Ratings        Rating[]
   List_Posts     List_Post[]
+}
+
+model JoinRequest {
+  id         Int     @id @default(autoincrement())
+  user_id    Int
+  channel_id Int
+  status     String  @default("pending")
+  channel    Channel @relation(fields: [channel_id], references: [id])
 }
