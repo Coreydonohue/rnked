@@ -22,11 +22,14 @@ const ViewChannel = ({ route }) => {
   const channelId = channel.id;
   const isPrivate = route.params.channel.private;
   const isAdmin = channel.admin_id === me.id ? true : false;
-  // const isJoined = ch
+  const isJoined = channel.members.find((member) => member.user_id === me?.id)
+    ? true
+    : false;
 
   console.log("isAdmin?", isAdmin);
+  console.log("is joined?", isJoined);
   // console.log("me", me);
-  console.log("channel", channel);
+  // console.log("channel", channel);
 
   const handleJoinPublic = async () => {
     try {
@@ -48,15 +51,32 @@ const ViewChannel = ({ route }) => {
     }
   };
 
+  const handleLeaveChannel = async () => {
+    //! create API call for deleting roll and update onPress logic 
+    try {
+      await leaveChannel(channelId);
+      console.log("user left channel", channelId);
+    } catch (error) {
+      console.error("Error joining channel:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{channel.name}</Text>
       <TouchableOpacity
         onPress={isPrivate ? handleJoinPrivate : handleJoinPublic}
       >
-        <Text style={styles.joinButton}>
-          {!isPrivate ? "Join Channel" : "Request to Join Channel"}
-        </Text>
+        {!isJoined ? (
+          <Text style={styles.joinButton}>
+            {!isPrivate ? "Join Channel" : "Request to Join Channel"}
+          </Text>
+        ) : (
+          <Text style={styles.joinButton}>
+            Leave Channel
+            {/* {isAdmin ? "Delete Channel" : "Leave Channel"} */}
+          </Text>
+        )}
       </TouchableOpacity>
       <Text> Members </Text>
       <FlatList
