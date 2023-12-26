@@ -52,7 +52,7 @@ const ViewChannel = ({ route }) => {
   };
 
   const handleLeaveChannel = async () => {
-    //! create API call for deleting roll and update onPress logic 
+    //! create API call for deleting role and update onPress logic 
     try {
       await leaveChannel(channelId);
       console.log("user left channel", channelId);

@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useGetCurrentUserQuery } from "../reducers/api";
 import LoadingSpinner from "../navigation/components/inputs/LoadingSpinner";
+import { useNavigation } from "@react-navigation/native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Profile from "./screens/Profile";
@@ -22,30 +23,79 @@ const userScreen = "UserScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 const HomeStack = ({ navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name={homeName} component={Home} options={{ headerShown: false}}/>
-    <Stack.Screen name={profileName} component={Profile} options={{ headerShown: false}}/>
+    <Stack.Screen
+      name="HomeScreen"
+      component={Home}
+      options={{
+        headerShown: true,
+        title: "Rnked", //! update to logo
+      }}
+    />
+    <Stack.Screen
+      name={profileName}
+      component={Profile}
+      options={{
+        headerShown: true,
+        title: "Home",
+        headerLeft: () => (
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10 }}
+            onPress={() => navigation.goBack()}
+          />
+        ),
+      }}
+    />
   </Stack.Navigator>
 );
 
 const SearchStack = ({ navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name={searchName} component={Search} options={{ headerShown: false}}/>
+    <Stack.Screen
+      name={searchName}
+      component={Search}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
 const ChannelsStack = ({ navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name={channelName} component={Channels} options={{ headerShown: false}}/>
-    <Stack.Screen name='Channel' component={ViewChannel} options={{ headerShown: false}}/>
+    <Stack.Screen
+      name="ChannelsScreen"
+      component={Channels}
+      options={{ headerShown: true, title: "Channels" }}
+    />
+    <Stack.Screen
+      name="Channel"
+      component={ViewChannel}
+      options={{
+        headerShown: true,
+        title: "Channel",
+        headerLeft: () => (
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10 }}
+            onPress={() => navigation.pop()}
+          />
+        ),
+      }}
+    />
   </Stack.Navigator>
 );
-
 const PostStack = ({ navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name={postName} component={Post} options={{ headerShown: false}}/>
+    <Stack.Screen
+      name={postName}
+      component={Post}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 
@@ -58,7 +108,7 @@ const ProfileStack = ({ route }) => {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name={profileName} options={{ headerShown: false}}>
+      <Stack.Screen name={profileName} options={{ headerShown: false }}>
         {(props) => <Profile {...props} me={me} />}
       </Stack.Screen>
     </Stack.Navigator>
@@ -66,8 +116,8 @@ const ProfileStack = ({ route }) => {
 };
 
 const AppStack = () => {
-
   const { data: me } = useGetCurrentUserQuery();
+  const navigation = useNavigation(); 
 
   return (
     <Tab.Navigator
@@ -112,6 +162,7 @@ const AppStack = () => {
         options={{ headerShown: false }}
         name={channelName}
         component={ChannelsStack}
+        navigation={navigation}
       />
       <Tab.Screen
         options={{ headerShown: false }}
