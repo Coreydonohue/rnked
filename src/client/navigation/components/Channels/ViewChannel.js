@@ -9,9 +9,11 @@ import {
 import {
   useJoinChannelMutation,
   useCreateJoinRequestMutation,
-  useGetCurrentUserQuery,
+  useGetCurrentUserQuery, 
 } from "../../../reducers/api";
 import ViewJoinRequests from "./ViewJoinRequests";
+import MembersList from "./MembersList";
+
 
 const ViewChannel = ({ route }) => {
   const [joinChannel] = useJoinChannelMutation();
@@ -79,12 +81,13 @@ const ViewChannel = ({ route }) => {
         )}
       </TouchableOpacity>
       <Text> Members </Text>
-      <FlatList
+      <MembersList members={channel.members} />
+      {/* <FlatList
         data={channel.members}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <Text>{item.user.username}</Text>}
         style={styles.feed}
-      />
+      /> */}
       {isAdmin ? <ViewJoinRequests channelId={channelId} /> : null}
 
       {/* //! add check for admin  */}

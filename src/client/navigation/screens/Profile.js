@@ -13,13 +13,10 @@ import UserCard from "../components/profile screen/UserCard";
 import auth from "../../../server/auth/firebase";
 import { useNavigation } from "@react-navigation/native";
 import {
-  useGetCurrentUserQuery,
-  useGetCurrentUserPostsQuery,
-  useGetUserChannelQuery,
-  useGetUserbyIdQuery,
   useGetPostsByUserIdQuery,
 } from "../../reducers/api";
 import LoadingSpinner from "../components/inputs/LoadingSpinner";
+
 
 const Profile = ({ route, me }) => {
   const navigation = useNavigation();
@@ -30,13 +27,12 @@ const Profile = ({ route, me }) => {
     useGetPostsByUserIdQuery(userId);
 
 
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{
-       
-        }}
+        contentContainerStyle={{}}
         showsVerticalScrollIndicator={false}
       >
         <UserCard userId={userId} posts={posts} />
@@ -52,7 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     // padding: 20,
   },
- 
 });
 
 export default Profile;
