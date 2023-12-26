@@ -6,18 +6,20 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { useGetJoinRequestsQuery, useJoinChannelMutation } from "../../../reducers/api";
+import { useGetJoinRequestsQuery, useAcceptJoinRequestMutation } from "../../../reducers/api";
 
 const ViewJoinRequests = ({ channelId }) => {
   const { data: joinRequests } = useGetJoinRequestsQuery(channelId);
-  const [joinChannel] = useJoinChannelMutation();
-  console.log("join requests from view", joinRequests);
-  console.log("channel id from view", channelId);
+  const [acceptRequest] = useAcceptJoinRequestMutation();
+  // console.log("join requests from view", joinRequests);
+  // console.log("channel id from view", channelId);
 
-  const handleAcceptRequest = async (userId) => {
+  const handleAcceptRequest = async (userId, requestId) => {
     try {
-        await joinChannel({
+        await acceptRequest({
             channelId: channelId, 
+            userId: userId,
+            requestId: requestId
         })
         console.log('channel joined', channelId)
 
@@ -36,7 +38,7 @@ const ViewJoinRequests = ({ channelId }) => {
         renderItem={({ item }) => (
           <View style={styles.joinRequestContainer}>
             <Text>{item.user ? item.user.username : "Unknown User"}</Text>
-            <TouchableOpacity onPress={() => handleAcceptRequest(item.user.id)}>
+            <TouchableOpacity onPress={() => handleAcceptRequest(item.user.id, item.id)}>
               <Text style={styles.acceptButton}>Accept</Text>
             </TouchableOpacity>
           </View>

@@ -150,7 +150,7 @@ export const rankApi = createApi({
     }),
     acceptJoinRequest: builder.mutation({
       query: (id) => ({
-        url: `api/role/accept`,
+        url: `api/joinRequest/accept`,
         method: "POST",
         body: id,
       }),
