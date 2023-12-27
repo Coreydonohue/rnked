@@ -43,16 +43,7 @@ router.post("/register", async (req, res, next) => {
       },
     });
 
-    // create role for user channel
-    const userRole = await prisma.role.create({
-      data: {
-        user_id: +newUser.id,
-        channel_id: +userChannel.id,
-        is_admin: true,
-      },
-    });
-
-    res.send(newUser, userRole);
+    res.send(newUser);
     console.log("User created:", newUser);
   } catch (error) {
     console.error("Error during registration:", error);
@@ -64,7 +55,8 @@ router.get("/me", firebaseProtection, async (req, res, next) => {
   try {
     const user = await prisma.User.findUnique({
       where: {
-        // firebaseUid: "LGPhOFoy4RWq5BHE51CtBdh2Klk1",
+        // firebaseUid: "LGPhOFoy4RWq5BHE51CtBdh2Klk1", user1
+        // firebaseUid: "saMDkG2tWLZXtFnrYJlfBEcHmy12" 
         firebaseUid: req.user.uid,
       },
     });

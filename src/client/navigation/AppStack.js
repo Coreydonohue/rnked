@@ -68,7 +68,18 @@ const ChannelsStack = ({ navigation }) => (
     <Stack.Screen
       name="ChannelsScreen"
       component={Channels}
-      options={{ headerShown: true, title: "Channels" }}
+      options={{
+        headerShown: true,
+        title: "Channels",
+        headerStyle: {
+          // backgroundColor: "your_desired_color", 
+          height: 50,
+        },
+        headerTitleStyle: {
+          // color: 'your_title_color', 
+          fontSize: 18, 
+        },
+      }}
     />
     <Stack.Screen
       name="Channel"
@@ -117,7 +128,7 @@ const ProfileStack = ({ route }) => {
 
 const AppStack = () => {
   const { data: me } = useGetCurrentUserQuery();
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   return (
     <Tab.Navigator

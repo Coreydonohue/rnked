@@ -49,6 +49,9 @@ export const rankApi = createApi({
     getAdminChannels: builder.query({
       query: (id) => `api/channels/admin/${id}`,
     }),
+    getJoinedChannels: builder.query({
+      query: (id) => `api/channels/joined/${id}`,
+    }),
     getPublicChannels: builder.query({
       query: () => `api/channels/public`,
     }),
@@ -164,6 +167,7 @@ export const {
   useGetAdminChannelsQuery, 
   useGetPublicChannelsQuery, 
   useGetPrivateChannelsQuery,
+  useGetJoinedChannelsQuery,
   useCreateChannelMutation,
   useJoinChannelMutation,
   useAcceptJoinRequestMutation,

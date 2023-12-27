@@ -69,11 +69,22 @@ router.get("/admin/:id", firebaseProtection, async (req, res, next) => {
   }
 });
 
-router.get("/public", firebaseProtection, async (req, res, next) => {
+router.get("/joined/:id", firebaseProtection, async (req, res, next) => {
   try {
-    const publicChannels = await prisma.Channel.findMany({
+    const firebaseUid = req.params.id;
+    const user = await prisma.user.findUnique({
       where: {
-        private: false,
+        firebaseUid: firebaseUid,
+      },
+    });
+
+    const joinedChannels = await prisma.Channel.findMany({
+      where: {
+        members: {
+          some: {
+            user_id: +user.id,
+          },
+        },
       },
       include: {
         members: {
@@ -85,7 +96,45 @@ router.get("/public", firebaseProtection, async (req, res, next) => {
         List: true,
       },
     });
-    res.send(publicChannels);
+    res.status(200).send(joinedChannels);
+    // console.log('admin channels', adminChannels)
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: "Internal server error. Please try again later." });
+    next(err);
+  }
+});
+
+router.get("/public", firebaseProtection, async (req, res, next) => {
+  try {
+    const firebaseUid = req.user.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUid: firebaseUid,
+      },
+    });
+
+    const publicChannels = await prisma.Channel.findMany({
+     where: {
+        private: false,
+        members: {
+          none: {
+              user_id: +user.id,
+          },
+        },
+      },
+      include: {
+        members: {
+          include: {
+            user: true,
+          },
+        },
+        Post: true,
+        List: true,
+      },
+    });
+    res.status(200).send(publicChannels);
     // console.log('admin channels', adminChannels)
   } catch (err) {
     res
@@ -97,9 +146,21 @@ router.get("/public", firebaseProtection, async (req, res, next) => {
 
 router.get("/private", firebaseProtection, async (req, res, next) => {
   try {
+    const firebaseUid = req.user.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUid: firebaseUid,
+      },
+    });
+
     const privateChannels = await prisma.Channel.findMany({
       where: {
         private: true,
+        members: {
+          none: {
+              user_id: +user.id,
+          },
+        },
       },
       include: {
         members: {
@@ -111,7 +172,7 @@ router.get("/private", firebaseProtection, async (req, res, next) => {
         List: true,
       },
     });
-    res.send(privateChannels);
+   res.status(200).send(privateChannels);
     // console.log('admin channels', adminChannels)
   } catch (err) {
     res

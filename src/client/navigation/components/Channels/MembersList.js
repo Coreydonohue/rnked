@@ -2,7 +2,7 @@ import { ListItem, Avatar } from "@rneui/themed";
 import { View } from "react-native";
 
 const MembersList = ({ members }) => {
-  console.log('data from list', members)
+  // console.log('data from list', members)
   return (
     <View>
       {members.map((l, i) => (

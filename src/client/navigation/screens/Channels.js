@@ -1,10 +1,11 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import CreateChannel from "../components/Channels/CreateChannel";
 import {
   useGetPrivateChannelsQuery,
   useGetAdminChannelsQuery,
   useGetPublicChannelsQuery,
+  useGetJoinedChannelsQuery,
 } from "../../reducers/api";
 import ChannelsList from "../components/Channels/ChannelsList";
 import auth from "../../../server/auth/firebase";
@@ -21,31 +22,58 @@ const Channels = () => {
   const { data: publicChannels, isLoading: loadingPublic } =
     useGetPublicChannelsQuery();
 
-  const { data: adminChannels, isLoading } = useGetAdminChannelsQuery(currentUserId);
+  const { data: adminChannels, isLoading } =
+    useGetAdminChannelsQuery(currentUserId);
+
+  const { data: joinedChannels } = useGetJoinedChannelsQuery(currentUserId);
 
   const handleChannelPress = (channel) => {
     navigation.navigate("Channel", { channel });
-  }
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
-    <View style={styles.container}>
-      <ChannelsList data={adminChannels} title="My Admin Channels" />
-      <ChannelsList data={publicChannels} title="Public Channels" />
-      <ChannelsList data={privateChannels} title="Private Channels" />
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.section}>
+          <Text style={styles.headerText}>My Channels</Text>
+          <ChannelsList data={adminChannels} title="Admin Channels" />
+          <ChannelsList data={joinedChannels} title="Joined Channels" />
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.headerText}>Explore Channels</Text>
+          <ChannelsList data={publicChannels} title="Public Channels" />
+          <ChannelsList data={privateChannels} title="Private Channels" />
+        </View>
+      </View>
       <CreateChannel />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "row", 
+    justifyContent: "space-between",
+    alignItems: "flex-start", 
+    // marginHorizontal: 16, 
+    marginBottom: 80,
+  },
+  section: {
+    // flex: 1,
+    // marginLeft: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  scrollContainer: {
+    flexGrow: 1,
   },
 });
 
