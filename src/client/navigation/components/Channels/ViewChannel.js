@@ -28,8 +28,8 @@ const ViewChannel = ({ route }) => {
     ? true
     : false;
 
-  console.log("isAdmin?", isAdmin);
-  console.log("is joined?", isJoined);
+  // console.log("isAdmin?", isAdmin);
+  // console.log("is joined?", isJoined);
   // console.log("me", me);
   // console.log("channel", channel);
 

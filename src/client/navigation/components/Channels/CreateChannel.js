@@ -9,20 +9,23 @@ import {
 import { CheckBox } from "react-native-elements";
 import { useState } from "react";
 import { useCreateChannelMutation } from "../../../reducers/api";
+import { useNavigation } from "@react-navigation/native";
 
 const CreateChannel = () => {
+  const navigation = useNavigation();
   const [createChannel] = useCreateChannelMutation();
   const [channelInput, setChannelInput] = useState("");
   const [isPrivate, setIsPrivate] = useState(false);
 
   const handleChannelSubmit = async () => {
     try {
-        await createChannel({
+        const response = await createChannel({
            name: channelInput, 
            private: isPrivate 
         })
         setChannelInput("")
         setIsPrivate(false)
+        // navigation.navigate("Channel", response.id); //! navigate to new channel page
     }catch (error) {
         console.error("Error creating channel:", error);
     }

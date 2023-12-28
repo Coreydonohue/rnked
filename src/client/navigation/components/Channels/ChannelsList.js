@@ -10,7 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 const ChannelsList = ({ data, title }) => {
-  console.log("data from list", data);
+  // console.log("data from list", data);
   const navigation = useNavigation();
   const handleChannelPress = (channel) => {
     navigation.navigate("Channel", { channel });
