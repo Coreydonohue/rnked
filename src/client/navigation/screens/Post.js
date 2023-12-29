@@ -1,87 +1,51 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Picker } from "react-native";
-import InputField from "../components/inputs/InputField";
-import FormButton from "../components/inputs/FormButton";
-import { useCreateNewPostMutation } from "../../reducers/api";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import Standard from "../components/posts/standard";
+import List from "../components/posts/list";
+import Review from "../components/posts/review";
+import { ButtonGroup } from "@rneui/themed";
 
-const Post = ({ navigation }) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [postType, setPostType] = useState("post"); // Default post type
-  const [createPost] = useCreateNewPostMutation();
+const Post = () => {
+  const [selectedTab, setSelectedTab] = useState(0);
 
-  const handlePost = async () => {
-    try {
-      const response = await createPost({
-        title: title,
-        content: content,
-        type: postType,
-      });
-      setTitle("");
-      setContent("");
-      setPostType("post"); // Reset post type to default after submission
-      console.log('new post', response)
-    } catch (err) {
-      console.error("Error creating group:", err);
-    }
+  const handleTabPress = (tab) => {
+    setSelectedTab(tab);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Post Screen</Text>
-      <Text style={styles.text}>Select Post Type:</Text>
-      <Picker
-        selectedValue={postType}
-        onValueChange={(itemValue) => setPostType(itemValue)}
-        style={{ height: 50, width: 150 }}
-      >
-        <Picker.Item label="Post" value="post" />
-        <Picker.Item label="List" value="list" />
-        <Picker.Item label="Review" value="review" />
-      </Picker>
-
-      {postType === "post" && (
-        <InputField
-          onChangeText={(userInput) => setTitle(userInput)}
-          placeholderText="Title"
-          iconType="user"
-          keyboardType="default"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      )}
-
-      {postType === "list" && (
-        <InputField
-          onChangeText={(userInput) => setTitle(userInput)}
-          placeholderText="List Title"
-          iconType="user"
-          keyboardType="default"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      )}
-
-      {postType === "review" && (
-        <InputField
-          onChangeText={(userInput) => setTitle(userInput)}
-          placeholderText="Review Title"
-          iconType="user"
-          keyboardType="default"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-      )}
-
-      <InputField
-        onChangeText={(userInput) => setContent(userInput)}
-        placeholderText="Content"
-        iconType="user"
-        keyboardType="default"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
-      <FormButton buttonTitle="Submit" onPress={handlePost} />
+<View style={styles.container}>
+      <View style={styles.buttonGroupContainer}>
+        <TouchableOpacity
+          style={[
+            styles.buttonStyle,
+            selectedTab === 0 && styles.selectedButtonStyle,
+          ]}
+          onPress={() => handleTabPress(0)}
+        >
+          <Text>Standard</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.buttonStyle,
+            selectedTab === 1 && styles.selectedButtonStyle,
+          ]}
+          onPress={() => handleTabPress(1)}
+        >
+          <Text>List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.buttonStyle,
+            selectedTab === 2 && styles.selectedButtonStyle,
+          ]}
+          onPress={() => handleTabPress(2)}
+        >
+          <Text>Review</Text>
+        </TouchableOpacity>
+      </View>
+      {selectedTab === 0 && <Standard />}
+      {selectedTab === 1 && <List />}
+      {selectedTab === 2 && <Review />}
     </View>
   );
 };
@@ -91,6 +55,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonGroupContainer: {
+    flexDirection: "row", // Align buttons horizontally
+    width: "85%",
+    justifyContent: "space-between", // Add space between buttons
+    position: "absolute",
+    top: 0,
+  },
+  buttonStyle: {
+    padding: 15,
+    flex: 1,
+    marginHorizontal: 5, // Add space between buttons
+    borderRadius: 10,
+    borderWidth: 1, // Add border
+    borderColor: "#ccc", // Border color
+  },
+  selectedButtonStyle: {
+    backgroundColor: "#48cae4",
+    borderColor: "#fff", 
   },
   text: {
     fontSize: 26,

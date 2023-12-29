@@ -96,6 +96,7 @@ router.get("/:id", firebaseProtection, async (req, res, next) => {
 
 router.post("/", firebaseProtection, async (req, res, next) => {
   const { title, content } = req.body;
+  console.log('req body from post', req.body)
 
   try {
     const firebaseUid = req.user.uid;
@@ -108,8 +109,8 @@ router.post("/", firebaseProtection, async (req, res, next) => {
     const newPost = await prisma.Post.create({
       data: {
         title: title,
+        content: content,
         user_id: user.id,
-        // author: { connect: { id: user.id } }
       },
     });
     console.log("new post", newPost);
