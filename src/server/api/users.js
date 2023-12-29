@@ -55,7 +55,7 @@ router.get("/me", firebaseProtection, async (req, res, next) => {
   try {
     const user = await prisma.User.findUnique({
       where: {
-        // firebaseUid: "LGPhOFoy4RWq5BHE51CtBdh2Klk1", user1
+        // firebaseUid: "LGPhOFoy4RWq5BHE51CtBdh2Klk1"
         // firebaseUid: "saMDkG2tWLZXtFnrYJlfBEcHmy12" 
         firebaseUid: req.user.uid,
       },
