@@ -158,6 +158,11 @@ export const rankApi = createApi({
         body: id,
       }),
     }),
+
+    //books 
+    getAllBooks: builder.query({
+      query: () => `api/books/all`,
+    }),
   }),
 });
 
@@ -185,4 +190,5 @@ export const {
   useDeleteCommentMutation,
   useCreateJoinRequestMutation, 
   useGetJoinRequestsQuery,
+  useGetAllBooksQuery
 } = rankApi;

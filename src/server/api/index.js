@@ -9,5 +9,6 @@ router.use("/like", require("./like"));
 router.use("/comment", require("./comment"));
 router.use("/role", require("./role"));
 router.use("/joinRequest", require("./joinRequest"));
+router.use("/books", require("./books"));
 
 module.exports = router;
