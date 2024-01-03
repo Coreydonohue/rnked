@@ -163,6 +163,15 @@ export const rankApi = createApi({
     getAllBooks: builder.query({
       query: () => `api/books/all`,
     }),
+
+    //list 
+    createNewList: builder.mutation({
+      query: (id) => ({
+        url: `api/list/new`,
+        method: "POST",
+        body: id,
+      }),
+    }),
   }),
 });
 
@@ -190,5 +199,6 @@ export const {
   useDeleteCommentMutation,
   useCreateJoinRequestMutation, 
   useGetJoinRequestsQuery,
-  useGetAllBooksQuery
+  useGetAllBooksQuery, 
+  useCreateNewListMutation, 
 } = rankApi;

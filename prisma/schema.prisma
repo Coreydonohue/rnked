@@ -75,13 +75,13 @@ model List {
   id         Int         @id @default(autoincrement())
   title      String
   content    String?
-  channel_id Int
+  channel_id Int?
   user_id    Int
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   Comments   Comment[]
   Like       Like[]
-  channel    Channel     @relation(fields: [channel_id], references: [id])
+  channel    Channel?     @relation(fields: [channel_id], references: [id])
   author     User        @relation(fields: [user_id], references: [id])
   Posts      List_Post[]
 }
@@ -90,8 +90,8 @@ model List_Post {
   id      Int    @id @default(autoincrement())
   rank    Int
   list_id Int
-  type    String
-  title   String
+  type    String?
+  title   String?
   book_id Int?
   book    Book?  @relation(fields: [book_id], references: [id])
   list    List   @relation(fields: [list_id], references: [id])
