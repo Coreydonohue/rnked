@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -12,7 +13,7 @@ import {
   useGetAllBooksQuery,
   useCreateNewListMutation,
 } from "../../../reducers/api";
-import { useState } from "react";
+import SubmitButton from "../inputs/SubmitButton";
 
 
 const List = () => {
@@ -20,8 +21,9 @@ const List = () => {
   // console.log("books from list", allBooks);
 
   const [createList] = useCreateNewListMutation();
-
   const [title, setTitle] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredBooks, setFilteredBooks] = useState([]);
 
   const handleNewList = async () => {
     try {
@@ -46,10 +48,18 @@ const List = () => {
         autoCapitalize="none"
         autoCorrect={false}
       />
+      <Input 
+        onChangeText={(userInput) => setTitle(userInput)}
+        placeholder="select book"
+        keyboardType="default"
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
 
-      <TouchableOpacity onPress={handleNewList}>
-        <Text>Create New List </Text>
-      </TouchableOpacity>
+      <SubmitButton
+      title={'Create List'}
+      onPress={handleNewList}
+      /> 
     </View>
   );
 };

@@ -6,7 +6,7 @@ import Review from "../components/posts/review";
 import { ButtonGroup } from "@rneui/themed";
 
 const Post = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(1); 
 
   const handleTabPress = (tab) => {
     setSelectedTab(tab);
