@@ -172,6 +172,13 @@ export const rankApi = createApi({
         body: id,
       }),
     }),
+    createNewListPost: builder.mutation({
+      query: (id) => ({
+        url: `api/list/post`,
+        method: "POST",
+        body: id,
+      }),
+    }),
   }),
 });
 
@@ -201,4 +208,5 @@ export const {
   useGetJoinRequestsQuery,
   useGetAllBooksQuery, 
   useCreateNewListMutation, 
+  useCreateNewListPostMutation,
 } = rankApi;
